@@ -1,0 +1,29 @@
+ @startuml
+  left to right direction
+
+  actor 用户
+  actor 管理员
+  actor 第三方支付平台
+
+  rectangle 电商系统 {
+    usecase "注册登录" as UC1
+    usecase "浏览商品" as UC2
+    usecase "提交订单" as UC3
+    usecase "支付订单" as UC4
+    usecase "生成支付请求" as UC5
+    usecase "查看订单" as UC6
+    usecase "退款处理" as UC7
+  }
+
+  用户 --> UC1
+  用户 --> UC2
+  用户 --> UC3
+  用户 --> UC4
+  用户 --> UC6
+
+  管理员 --> UC7
+  第三方支付平台 --> UC5
+
+  UC4 .> UC5 : <<include>>
+  UC7 .> UC4 : <<extend>>
+  @enduml
