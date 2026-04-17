@@ -8,16 +8,18 @@ These rules apply to the current repository `C:\kuguaHome\personal resource\stud
 2. Existing old lesson plans do not serve as references. Lesson plans must be regenerated only according to the lesson-plan outline described in `AGENTS.md`, and old lesson plans must not be read.
 3. When the user explicitly asks to start a new lesson, the agent must not read or rely on any existing or historical lesson-plan files as teaching references.
 4. For a new lesson, the agent must first obtain the corresponding chapter content from the textbook, then screen chapter-matched real questions through the local question-bank index and the local Markdown real-question repository first. If that local path is insufficient, it must consult 游工 before expanding to online sources.
-5. Existing or historical lesson-plan files must not be used as persistence targets.
-6. After teaching, the only allowed persistence target for newly generated chapter lesson plans is `C:\kuguaHome\personal resource\study\book\SoftwareExam\doc\Software-Designer-master\课案\真题驱动`.
-7. For day-to-day question lookup, lesson question assembly, and in-repo real-question retrieval, the agent must first use the local question-bank index `doc/Software-Designer-master/真题/xisai_md/xisai_md_总索引.md`, then search the local Markdown real-question repository under `doc/Software-Designer-master/真题/xisai_md/题目`.
-8. If the local index and local Markdown real-question repository cannot satisfy the current question requirement, the agent must not automatically expand to new online sources. It must first consult 游工, explain the gap, and provide handling options.
-9. The skill `$softwareexam-question-sourcing` is no longer the default first step for normal teaching-time question lookup. It is reserved for question-bank expansion, source recovery, or other online sourcing work that 游工 has explicitly requested or approved after the local index/local repository path is exhausted.
-10. The active lesson-plan structure is now `17` plans in total:
+5. For textbook chapter positioning and directory lookup, the agent must first use the persisted textbook-catalog Markdown instead of repeatedly trying to extract the local PDF table of contents.
+6. The local PDF remains the canonical local textbook file, but it is not the default entrypoint for directory discovery. Use it for chapter content lookup only after the target chapter has already been identified through the catalog reference or another confirmed readable source for the same fifth-edition textbook.
+7. Existing or historical lesson-plan files must not be used as persistence targets.
+8. After teaching, the only allowed persistence target for newly generated chapter lesson plans is `C:\kuguaHome\personal resource\study\book\SoftwareExam\doc\Software-Designer-master\课案\真题驱动`.
+9. For day-to-day question lookup, lesson question assembly, and in-repo real-question retrieval, the agent must first use the local question-bank index `doc/Software-Designer-master/真题/xisai_md/xisai_md_总索引.md`, then search the local Markdown real-question repository under `doc/Software-Designer-master/真题/xisai_md/题目`.
+10. If the local index and local Markdown real-question repository cannot satisfy the current question requirement, the agent must not automatically expand to new online sources. It must first consult 游工, explain the gap, and provide handling options.
+11. The skill `$softwareexam-question-sourcing` is no longer the default first step for normal teaching-time question lookup. It is reserved for question-bank expansion, source recovery, or other online sourcing work that 游工 has explicitly requested or approved after the local index/local repository path is exhausted.
+12. The active lesson-plan structure is now `17` plans in total:
    - `12` textbook-chapter lesson plans first
    - then `5` afternoon case-analysis type lesson plans
-11. During the textbook-chapter phase, questions should be morning questions only. Do not add afternoon case-analysis questions into chapter-based rounds.
-12. Any older rule that implies "only 12 lesson plans in total" or "chapter rounds must include afternoon case-analysis questions" is superseded by the rules above.
+13. During the textbook-chapter phase, questions should be morning questions only. Do not add afternoon case-analysis questions into chapter-based rounds.
+14. Any older rule that implies "only 12 lesson plans in total" or "chapter rounds must include afternoon case-analysis questions" is superseded by the rules above.
 
 ## Source And Storage Locations
 1. Lesson plans are divided into two phases:
@@ -27,8 +29,10 @@ These rules apply to the current repository `C:\kuguaHome\personal resource\stud
 3. This `课案\真题驱动` directory is the only allowed persistence location for lesson-plan outputs. Do not write back to old lesson-plan files elsewhere.
 4. Local real questions are stored under `C:\kuguaHome\personal resource\study\book\SoftwareExam\doc\Software-Designer-master\真题`.
 5. The textbook is `C:\kuguaHome\personal resource\study\book\SoftwareExam\2018软件设计师教程_第5版_-_9787302491224.pdf`.
-6. The local question-bank index is `C:\kuguaHome\personal resource\study\book\SoftwareExam\doc\Software-Designer-master\真题\xisai_md\xisai_md_总索引.md`.
-7. The primary local Markdown real-question repository is `C:\kuguaHome\personal resource\study\book\SoftwareExam\doc\Software-Designer-master\真题\xisai_md\题目`.
+6. The persisted textbook-catalog reference is `C:\kuguaHome\personal resource\study\book\SoftwareExam\doc\agent\sdes-textbook-catalog_20260417-181907\reports\20260417_sdes-textbook-catalog_report_v01.md`.
+7. This textbook-catalog reference is the default source for chapter directory lookup, chapter numbering confirmation, and quick textbook navigation.
+8. The local question-bank index is `C:\kuguaHome\personal resource\study\book\SoftwareExam\doc\Software-Designer-master\真题\xisai_md\xisai_md_总索引.md`.
+9. The primary local Markdown real-question repository is `C:\kuguaHome\personal resource\study\book\SoftwareExam\doc\Software-Designer-master\真题\xisai_md\题目`.
 
 ## Teaching Workflow
 
@@ -37,7 +41,9 @@ These rules apply to the current repository `C:\kuguaHome\personal resource\stud
 2. If the user has not made the path explicit, ask whether to continue learning from the current progress or start a new lesson.
 3. If the user explicitly asks to start a new lesson, do not ask the path-selection question again. Instead:
    - identify the target textbook chapter for that lesson
-   - read the corresponding chapter content from the textbook first
+   - first use `doc/agent/sdes-textbook-catalog_20260417-181907/reports/20260417_sdes-textbook-catalog_report_v01.md` to confirm the correct chapter number, chapter title, and section range
+   - do not spend repeated effort trying to extract the local PDF directory before chapter identification is complete
+   - after the chapter is confirmed, read the corresponding chapter content from the textbook; if the local PDF body is unreadable in the current environment, use another confirmed readable source for the same fifth-edition textbook
    - first consult `doc/Software-Designer-master/真题/xisai_md/xisai_md_总索引.md`
    - then search the local Markdown real-question repository under `doc/Software-Designer-master/真题/xisai_md/题目` for chapter-matched real questions
    - if the local index/local Markdown repository still cannot satisfy the question requirement, consult 游工 first and provide handling options before using `$softwareexam-question-sourcing` or any new online source
@@ -58,6 +64,33 @@ These rules apply to the current repository `C:\kuguaHome\personal resource\stud
    - if the original source does not specify the score for each sub-question, use your inferred score
 12. For each round, the total time budget for textbook-positioning, question-searching, and question-assembly must not exceed 15 minutes.
 13. If the agent cannot find enough chapter-matched morning questions within that 15-minute budget, it must not force the target count. It must report the exact number found, the missing count, and the reason.
+
+### 1B. Textbook Chapter Lesson-Plan Authoring Method
+1. This method is mandatory for the `12` textbook-chapter lesson plans and should be reused chapter by chapter according to the textbook catalog.
+2. After the target textbook chapter is confirmed, the agent must first retrieve the chapter-matched local morning multiple-choice questions from the local index and the local Markdown question repository. Do not begin by drafting explanations from memory or from old lesson plans.
+3. The chapter lesson plan must be question-driven. The agent should first assemble the relevant local objective-question pool for that chapter, then derive the lesson-plan structure from the real question coverage.
+4. The agent must extract the tested knowledge points from the collected objective questions and assign each question to exactly one primary knowledge point for weighting purposes. Do not count a single question multiple times across different knowledge points when calculating weights.
+5. The default weight definition is: `knowledge-point weight = number of objective questions primarily testing that knowledge point / total number of chapter-related objective questions in the selected pool`.
+6. The lesson plan must sort knowledge points by weight from high to low. Heavier knowledge points must appear earlier and lighter knowledge points later.
+7. Each knowledge-point section title must explicitly display its weight in a clear form such as `权值：x/y` and may also include the approximate percentage when helpful.
+8. Each knowledge-point section must include detailed beginner-oriented explanation, not outline-only prompts. At minimum, it should cover:
+   - what the concept means
+   - why it matters in this chapter
+   - the core distinctions, formulas, algorithms, or judgment rules involved
+   - a recommended solving procedure
+   - common traps or easy-mistake points
+9. If the section mentions a term, abbreviation, algorithm name, data structure name, or mechanism name that a beginner may not already understand, the lesson plan must explain it in place. Do not leave key terms as unexplained labels.
+10. The quality bar is: after reading the lesson plan, the user should not need to go back to the textbook just to understand the core knowledge points named in the lesson plan.
+11. Each knowledge-point section must include `1` to `2` representative objective real-question examples from the local repository showing how that knowledge point is tested.
+12. Real-question examples must be embedded directly in the lesson plan body. Do not only reference a filename and question number. Include:
+   - the question stem
+   - the options
+   - the correct answer
+   - a detailed explanation, preferably including why the correct option is correct and why the wrong options are wrong when that adds teaching value
+13. When the local repository contains enough questions, representative examples should preferentially come from roughly the most recent `10` years. If older questions are used, prefer them only when they better cover a high-value knowledge point.
+14. The lesson plan should also include a brief chapter-level summary of the local objective-question distribution so the ordering and emphasis are evidence-based rather than impression-based.
+15. The agent must self-review the lesson plan from a beginner perspective before finalizing it. If a beginner reader would still not understand a named concept, algorithm, distinction, formula, or solving step without opening the textbook, the lesson plan is not complete and must be expanded before delivery.
+16. If a chapter has too few local questions to support a full weight-based breakdown, the agent must still follow this method as far as the evidence allows, clearly state the reduced sample size, and explain which knowledge points therefore have lower confidence.
 
 ### 1A. Local Question-Bank Lookup Workflow
 1. When the task is to search, retrieve, assemble, or reuse real questions for teaching, practice, or mock-question selection, the agent must first open and use `doc/Software-Designer-master/真题/xisai_md/xisai_md_总索引.md` as the primary entrypoint.
