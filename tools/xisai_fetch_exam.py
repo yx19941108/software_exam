@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import time
 import os
 import re
 import sys
@@ -60,6 +61,11 @@ def looks_like_json_payload(text: str) -> bool:
         (stripped.startswith("[{") and stripped.endswith("}]"))
         or (stripped.startswith("{") and stripped.endswith("}"))
     )
+
+
+def is_meaningful_html(text: str) -> bool:
+    plain = clean_text(re.sub(r"<[^>]+>", " ", text or ""))
+    return plain not in {"", "[]", "{}", "【】", "问题", "问题1"} and plain != " "
 
 
 def parse_vars(html: str) -> Dict[str, str]:
@@ -248,7 +254,7 @@ def html_to_markdown(
 
 
 def do_login(session: requests.Session, username: str, password: str) -> None:
-    session.get(LOGIN_PAGE, headers={"User-Agent": USER_AGENT}, timeout=30)
+    request_with_retry(session, "GET", LOGIN_PAGE, headers={"User-Agent": USER_AGENT}, timeout=30)
     sid = session.cookies.get("_sid_") or ""
     body = urllib.parse.urlencode(
         [
@@ -270,7 +276,9 @@ def do_login(session: requests.Session, username: str, password: str) -> None:
         "sscc": hashlib.md5((sid + username).encode()).hexdigest(),
         "sscc2": get_ascii_key(body),
     }
-    response = session.post(
+    response = request_with_retry(
+        session,
+        "POST",
         "https://wangxiao.xisaiwang.com/ucenter2/user/doLogin.do",
         data=body,
         headers=headers,
@@ -283,7 +291,7 @@ def do_login(session: requests.Session, username: str, password: str) -> None:
 
 
 def fetch_exam_meta(session: requests.Session, tp_url: str) -> Dict[str, str]:
-    response = session.get(tp_url, headers={"User-Agent": USER_AGENT}, timeout=30)
+    response = request_with_retry(session, "GET", tp_url, headers={"User-Agent": USER_AGENT}, timeout=30)
     response.raise_for_status()
     html = response.text
     meta = parse_vars(html)
@@ -301,7 +309,9 @@ def start_exam(session: requests.Session, meta: Dict[str, str]) -> int:
         "X-Requested-With": "XMLHttpRequest",
         "Referer": meta["tp_url"],
     }
-    check = session.post(
+    check = request_with_retry(
+        session,
+        "POST",
         "https://wangxiao.xisaiwang.com/ucenterapi/api3th/user/checkZuoti.do",
         data={
             "paperId": meta["id"],
@@ -316,7 +326,9 @@ def start_exam(session: requests.Session, meta: Dict[str, str]) -> int:
     if check_payload.get("resultCode") != "SUCCESS":
         raise RuntimeError(f"checkZuoti 失败: {check_payload}")
     check_model = check_payload["model"]
-    start = session.post(
+    start = request_with_retry(
+        session,
+        "POST",
         "https://wangxiao.xisaiwang.com/tikuapi/api3th/zuoti/startExam.do",
         data={
             "dataId": meta["id"],
@@ -346,7 +358,9 @@ def load_scantron(session: requests.Session, test_log_id: int) -> List[int]:
         "X-Requested-With": "XMLHttpRequest",
         "Referer": f"https://wangxiao.xisaiwang.com/tiku2/exam{test_log_id}.html",
     }
-    response = session.post(
+    response = request_with_retry(
+        session,
+        "POST",
         "https://wangxiao.xisaiwang.com/tikuapi/api3th/zuoti/loadScantron.do",
         data={"testLogId": str(test_log_id)},
         headers=headers,
@@ -370,7 +384,9 @@ def load_question(session: requests.Session, test_log_id: int, st_id: int) -> Di
         "X-Requested-With": "XMLHttpRequest",
         "Referer": f"https://wangxiao.xisaiwang.com/tiku2/exam{test_log_id}.html",
     }
-    response = session.post(
+    response = request_with_retry(
+        session,
+        "POST",
         "https://wangxiao.xisaiwang.com/tikuapi/api3th/zuoti/loadShitiInfo.do",
         data={"stId": str(st_id), "testLogId": str(test_log_id)},
         headers=headers,
@@ -383,16 +399,122 @@ def load_question(session: requests.Session, test_log_id: int, st_id: int) -> Di
     return payload["model"]
 
 
+def load_analysis(session: requests.Session, test_log_id: int, st_id: int) -> Dict[str, object]:
+    headers = {
+        "User-Agent": USER_AGENT,
+        "clientType": "PC",
+        "X-Requested-With": "XMLHttpRequest",
+        "Referer": f"https://wangxiao.xisaiwang.com/tiku2/exam{test_log_id}.html",
+    }
+    response = request_with_retry(
+        session,
+        "POST",
+        "https://wangxiao.xisaiwang.com/tikuapi/api3th/zuoti/loadShitiAnalysis.do",
+        data={"stId": str(st_id), "testLogId": str(test_log_id)},
+        headers=headers,
+        timeout=30,
+    )
+    response.raise_for_status()
+    payload = response.json()
+    if payload.get("resultCode") != "SUCCESS":
+        raise RuntimeError(f"loadShitiAnalysis 失败: stId={st_id}, payload={payload}")
+    return payload["model"]
+
+
+def request_with_retry(
+    session: requests.Session,
+    method: str,
+    url: str,
+    *,
+    retries: int = 3,
+    retry_delay: float = 1.5,
+    **kwargs: object,
+) -> requests.Response:
+    last_error: Exception | None = None
+    for attempt in range(1, retries + 1):
+        try:
+            response = session.request(method, url, **kwargs)
+            response.raise_for_status()
+            return response
+        except (requests.exceptions.Timeout, requests.exceptions.ConnectionError, requests.exceptions.HTTPError) as exc:
+            last_error = exc
+            if attempt >= retries:
+                raise
+            time.sleep(retry_delay * attempt)
+    if last_error:
+        raise last_error
+    raise RuntimeError(f"请求失败: {method} {url}")
+
+
+def normalize_answer_values(value: object) -> List[str]:
+    if isinstance(value, list):
+        out: List[str] = []
+        for item in value:
+            if isinstance(item, list):
+                text = "".join(str(x).strip() for x in item if str(x).strip())
+            else:
+                text = str(item).strip()
+            if text:
+                out.append(text)
+        return out
+    text = clean_text(str(value or ""))
+    return [text] if text else []
+
+
+def fill_answer_into_stem(stem_text: str, answer_text: str) -> str:
+    if not answer_text:
+        return stem_text
+    patterns = [
+        r"（\s*[）)]",
+        r"\(\s*[)）]",
+        r"（\s*）",
+        r"\(\s*\)",
+    ]
+    replaced = stem_text
+    for pattern in patterns:
+        new_text, count = re.subn(pattern, f"（{answer_text}）", replaced, count=1)
+        if count > 0:
+            return new_text
+    return stem_text
+
+
+def format_answer_block(
+    *,
+    session: requests.Session,
+    title: str,
+    html: str,
+    assets_dir: Path,
+    asset_ref_prefix: str,
+    asset_prefix: str,
+    base_url: str,
+) -> List[str]:
+    if not is_meaningful_html(html):
+        return [f"### {title}", "", "站点未提供标准答案/解析"]
+    md = html_to_markdown(
+        html,
+        session=session,
+        assets_dir=assets_dir,
+        asset_ref_prefix=asset_ref_prefix,
+        asset_prefix=asset_prefix,
+        base_url=base_url,
+    )
+    if not md.strip():
+        md = "站点未提供标准答案/解析"
+    return [f"### {title}", "", md]
+
+
 def format_question(
     *,
     session: requests.Session,
     question_index: int,
     question: Dict[str, object],
+    analysis: Dict[str, object],
     assets_dir: Path,
     asset_ref_prefix: str,
     base_url: str,
 ) -> str:
     shiti: Dict[str, object] = question["shiti"]  # type: ignore[assignment]
+    analysis_shiti: Dict[str, object] = analysis["shiti"]  # type: ignore[assignment]
     st_type_name = str(shiti.get("stTypeName", "")).strip() or "未知题型"
     st_id = int(shiti["id"])
     question_map = shiti.get("questionMap")
@@ -404,6 +526,9 @@ def format_question(
         asset_prefix=f"q{question_index:02d}_st{st_id}_tigan",
         base_url=base_url,
     )
+    answer_values = normalize_answer_values(analysis_shiti.get("answerArray"))
+    if st_type_name in {"单选题", "多选题", "判断题"} and answer_values:
+        tigan_md = fill_answer_into_stem(tigan_md, "/".join(answer_values))
     parts: List[str] = [f"## 第{question_index}题（{st_type_name}）", "", tigan_md or "题干为空"]
     if isinstance(question_map, list) and question_map:
         render_blocks: List[str] = []
@@ -453,6 +578,60 @@ def format_question(
         and not looks_like_json_payload(extra_question)
     ):
         parts.extend(["", "### 补充题面", "", extra_question])
+
+    if st_type_name in {"单选题", "多选题", "判断题"}:
+        if answer_values:
+            parts.extend(["", f"### 正确答案", "", "、".join(answer_values)])
+        else:
+            parts.extend(["", "### 正确答案", "", "站点未提供标准答案"])
+        analysis_html = ""
+        analysis_array = analysis_shiti.get("analysisArray")
+        if isinstance(analysis_array, list) and analysis_array:
+            chunks: List[str] = []
+            for item in analysis_array:
+                if isinstance(item, list):
+                    chunks.extend(str(x) for x in item if str(x).strip())
+                elif str(item).strip():
+                    chunks.append(str(item))
+            analysis_html = "\n".join(chunks)
+        if not analysis_html:
+            analysis_html = str(analysis_shiti.get("analysis", ""))
+        parts.extend(
+            [""] + format_answer_block(
+                session=session,
+                title="解析",
+                html=analysis_html,
+                assets_dir=assets_dir,
+                asset_ref_prefix=asset_ref_prefix,
+                asset_prefix=f"q{question_index:02d}_st{st_id}_analysis",
+                base_url=base_url,
+            )
+        )
+    else:
+        answer_html = str(analysis_shiti.get("answer", ""))
+        analysis_html = str(analysis_shiti.get("analysis", ""))
+        parts.extend(
+            [""] + format_answer_block(
+                session=session,
+                title="参考答案",
+                html=answer_html,
+                assets_dir=assets_dir,
+                asset_ref_prefix=asset_ref_prefix,
+                asset_prefix=f"q{question_index:02d}_st{st_id}_answer",
+                base_url=base_url,
+            )
+        )
+        parts.extend(
+            [""] + format_answer_block(
+                session=session,
+                title="解析",
+                html=analysis_html,
+                assets_dir=assets_dir,
+                asset_ref_prefix=asset_ref_prefix,
+                asset_prefix=f"q{question_index:02d}_st{st_id}_analysis",
+                base_url=base_url,
+            )
+        )
     return "\n".join(parts).strip() + "\n"
 
 
@@ -480,11 +659,13 @@ def build_markdown(
     question_blocks: List[str] = []
     for idx, st_id in enumerate(st_ids_list, start=1):
         model = load_question(session, test_log_id, st_id)
+        analysis = load_analysis(session, test_log_id, st_id)
         question_blocks.append(
             format_question(
                 session=session,
                 question_index=idx,
                 question=model,
+                analysis=analysis,
                 assets_dir=assets_dir,
                 asset_ref_prefix=asset_ref_prefix,
                 base_url=exam_url,

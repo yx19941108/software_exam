@@ -7,15 +7,17 @@ These rules apply to the current repository `C:\kuguaHome\personal resource\stud
 1. Teaching is no longer driven by the existing lesson plans. Future teaching is driven by real questions.
 2. Existing old lesson plans do not serve as references. Lesson plans must be regenerated only according to the lesson-plan outline described in `AGENTS.md`, and old lesson plans must not be read.
 3. When the user explicitly asks to start a new lesson, the agent must not read or rely on any existing or historical lesson-plan files as teaching references.
-4. For a new lesson, the agent must first obtain the corresponding chapter content from the textbook, then screen chapter-matched real questions from both online sources and the local real-question repository.
+4. For a new lesson, the agent must first obtain the corresponding chapter content from the textbook, then screen chapter-matched real questions through the local question-bank index and the local Markdown real-question repository first. If that local path is insufficient, it must consult 游工 before expanding to online sources.
 5. Existing or historical lesson-plan files must not be used as persistence targets.
 6. After teaching, the only allowed persistence target for newly generated chapter lesson plans is `C:\kuguaHome\personal resource\study\book\SoftwareExam\doc\Software-Designer-master\课案\真题驱动`.
-7. When sourcing or recovering real questions for this project, the agent must use the skill `$softwareexam-question-sourcing` first.
-8. The active lesson-plan structure is now `17` plans in total:
+7. For day-to-day question lookup, lesson question assembly, and in-repo real-question retrieval, the agent must first use the local question-bank index `doc/Software-Designer-master/真题/xisai_md/xisai_md_总索引.md`, then search the local Markdown real-question repository under `doc/Software-Designer-master/真题/xisai_md/题目`.
+8. If the local index and local Markdown real-question repository cannot satisfy the current question requirement, the agent must not automatically expand to new online sources. It must first consult 游工, explain the gap, and provide handling options.
+9. The skill `$softwareexam-question-sourcing` is no longer the default first step for normal teaching-time question lookup. It is reserved for question-bank expansion, source recovery, or other online sourcing work that 游工 has explicitly requested or approved after the local index/local repository path is exhausted.
+10. The active lesson-plan structure is now `17` plans in total:
    - `12` textbook-chapter lesson plans first
    - then `5` afternoon case-analysis type lesson plans
-9. During the textbook-chapter phase, questions should be morning questions only. Do not add afternoon case-analysis questions into chapter-based rounds.
-10. Any older rule that implies "only 12 lesson plans in total" or "chapter rounds must include afternoon case-analysis questions" is superseded by the rules above.
+11. During the textbook-chapter phase, questions should be morning questions only. Do not add afternoon case-analysis questions into chapter-based rounds.
+12. Any older rule that implies "only 12 lesson plans in total" or "chapter rounds must include afternoon case-analysis questions" is superseded by the rules above.
 
 ## Source And Storage Locations
 1. Lesson plans are divided into two phases:
@@ -25,6 +27,8 @@ These rules apply to the current repository `C:\kuguaHome\personal resource\stud
 3. This `课案\真题驱动` directory is the only allowed persistence location for lesson-plan outputs. Do not write back to old lesson-plan files elsewhere.
 4. Local real questions are stored under `C:\kuguaHome\personal resource\study\book\SoftwareExam\doc\Software-Designer-master\真题`.
 5. The textbook is `C:\kuguaHome\personal resource\study\book\SoftwareExam\2018软件设计师教程_第5版_-_9787302491224.pdf`.
+6. The local question-bank index is `C:\kuguaHome\personal resource\study\book\SoftwareExam\doc\Software-Designer-master\真题\xisai_md\xisai_md_总索引.md`.
+7. The primary local Markdown real-question repository is `C:\kuguaHome\personal resource\study\book\SoftwareExam\doc\Software-Designer-master\真题\xisai_md\题目`.
 
 ## Teaching Workflow
 
@@ -34,7 +38,9 @@ These rules apply to the current repository `C:\kuguaHome\personal resource\stud
 3. If the user explicitly asks to start a new lesson, do not ask the path-selection question again. Instead:
    - identify the target textbook chapter for that lesson
    - read the corresponding chapter content from the textbook first
-   - use `$softwareexam-question-sourcing` to screen chapter-matched real questions from online sources and the local real-question repository
+   - first consult `doc/Software-Designer-master/真题/xisai_md/xisai_md_总索引.md`
+   - then search the local Markdown real-question repository under `doc/Software-Designer-master/真题/xisai_md/题目` for chapter-matched real questions
+   - if the local index/local Markdown repository still cannot satisfy the question requirement, consult 游工 first and provide handling options before using `$softwareexam-question-sourcing` or any new online source
    - during the textbook-chapter phase, provide morning questions only for that chapter
 4. If the user chooses to continue from the current progress:
    - during the textbook-chapter phase, provide morning questions only corresponding to that progress
@@ -52,6 +58,13 @@ These rules apply to the current repository `C:\kuguaHome\personal resource\stud
    - if the original source does not specify the score for each sub-question, use your inferred score
 12. For each round, the total time budget for textbook-positioning, question-searching, and question-assembly must not exceed 15 minutes.
 13. If the agent cannot find enough chapter-matched morning questions within that 15-minute budget, it must not force the target count. It must report the exact number found, the missing count, and the reason.
+
+### 1A. Local Question-Bank Lookup Workflow
+1. When the task is to search, retrieve, assemble, or reuse real questions for teaching, practice, or mock-question selection, the agent must first open and use `doc/Software-Designer-master/真题/xisai_md/xisai_md_总索引.md` as the primary entrypoint.
+2. After locating candidate files through the index, the agent must search inside the local Markdown real-question repository under `doc/Software-Designer-master/真题/xisai_md/题目`.
+3. The local index plus local Markdown repository is the default and preferred path for question retrieval in this project.
+4. If the local index/local Markdown repository does not contain enough suitable questions, the agent must pause and consult 游工 with a brief gap summary and concrete options, instead of silently switching to online sourcing.
+5. Only after 游工 explicitly approves expansion beyond the local index/local repository may the agent use `$softwareexam-question-sourcing` or other online sourcing paths.
 
 ### 2. Explanation After The User Answers
 1. After the user answers, provide detailed knowledge-point explanations for:
