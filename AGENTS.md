@@ -116,16 +116,19 @@ These rules apply to the current repository `C:\kuguaHome\personal resource\stud
 2. Use the following format for multiple-choice questions:
    - `题干(正确答案)`
    - `4选项`
-   - `我的答案，你的解析讲解。`
+   - `答案，解析。`
 3. Use the following format for case-analysis questions:
    - complete question stem
    - the user's answer to each sub-question
    - the correct answer to each sub-question
    - knowledge-point explanation
+4. For textbook-chapter lessons, any question that receives a detailed explanation in the current round, and any question the user answered incorrectly, must be merged into the corresponding chapter lesson plan as a representative example in the appropriate knowledge-point section.
+5. If an equivalent representative example already exists in the lesson plan, reuse or strengthen the existing example instead of inserting a duplicate block.
 
 ### 3. Lesson-Plan Persistence And Progression
 1. After the user states that they understand the explanation, persist the explained knowledge points into the lesson plan.
-2. Then determine the next step based on the user's correctness rate:
+2. When 游工 explicitly requests immediate lesson-plan merging in the same turn as grading/explanation, the agent may merge the explained or wrong-question examples immediately instead of waiting for a later confirmation turn.
+3. Then determine the next step based on the user's correctness rate:
    - if it is greater than 75%, ask the user whether to enter the next round of learning
    - if it is less than or equal to 75%, recommend that the user continue practicing real questions for the same chapter, unless the user explicitly requires a temporary skip
 
