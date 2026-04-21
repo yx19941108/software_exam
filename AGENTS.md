@@ -56,14 +56,15 @@ These rules apply to the current repository `C:\kuguaHome\personal resource\stud
 7. Prefer real questions. If no real questions are available, non-real-question materials may be used, but self-created questions are absolutely not allowed.
 8. Prioritize questions from approximately the most recent 10 years.
 9. If there are not enough questions, do not force the count. Explain that the tested point has a low exam frequency.
-10. If some real questions include images or other content that are not easy to show in the chat box, tell the user to view the original question in the corresponding webpage or file and answer there.
-11. Score the questions according to the real exam scoring rules:
+10. Unless 游工 explicitly requests a chat-only preview, assembled question sets for teaching or training rounds must not be fully delivered in the chat box. They must be written to the training-round directory first, and the chat should only provide the target file path, a brief summary, and answering instructions.
+11. If 游工 explicitly requests a chat-only preview and some real questions include images or other content that are not easy to show in the chat box, tell the user to view the original question in the corresponding webpage or file and answer there.
+12. Score the questions according to the real exam scoring rules:
    - each multiple-choice question is worth 1 point
    - each case-analysis question is worth 15 points
    - if the original source specifies the score for each sub-question, use the original source
    - if the original source does not specify the score for each sub-question, use your inferred score
-12. For each round, the total time budget for textbook-positioning, question-searching, and question-assembly must not exceed 15 minutes.
-13. If the agent cannot find enough chapter-matched morning questions within that 15-minute budget, it must not force the target count. It must report the exact number found, the missing count, and the reason.
+13. For each round, the total time budget for textbook-positioning, question-searching, and question-assembly must not exceed 15 minutes.
+14. If the agent cannot find enough chapter-matched morning questions within that 15-minute budget, it must not force the target count. It must report the exact number found, the missing count, and the reason.
 
 ### 1B. Textbook Chapter Lesson-Plan Authoring Method
 1. This method is mandatory for the `12` textbook-chapter lesson plans and should be reused chapter by chapter according to the textbook catalog.
@@ -98,6 +99,15 @@ These rules apply to the current repository `C:\kuguaHome\personal resource\stud
 3. The local index plus local Markdown repository is the default and preferred path for question retrieval in this project.
 4. If the local index/local Markdown repository does not contain enough suitable questions, the agent must pause and consult 游工 with a brief gap summary and concrete options, instead of silently switching to online sourcing.
 5. Only after 游工 explicitly approves expansion beyond the local index/local repository may the agent use `$softwareexam-question-sourcing` or other online sourcing paths.
+
+### 1C. Training Round File Workflow
+1. Training-round question sets must be generated under `doc/Software-Designer-master/真题/xisai_md/真题训练/`.
+2. Unless 游工 explicitly requests a chat-only preview, question delivery for learning rounds, practice rounds, and newly assembled training sets must be persisted to this directory instead of being fully printed in the chat box.
+3. When 游工 does not specify a filename but the task is to assemble a round of questions, the agent must create or update the appropriate file in this directory using the `章节 + 第x轮真题训练` naming pattern, for example `第4章第三轮真题训练.md`.
+4. In training-round Markdown files, every option of every question must occupy its own line.
+5. In training-round Markdown files, question images must be embedded directly in the body by default, preferably using relative paths.
+6. If 游工 specifies a training-round file as the grading source, the agent must read that file first and grade strictly against its contents.
+7. Composite questions must preserve the complete `问题1 / 问题2 / 问题3` structure and must not leak answers in the prompt.
 
 ### 2. Explanation After The User Answers
 1. After the user answers, provide detailed knowledge-point explanations for:
