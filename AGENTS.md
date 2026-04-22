@@ -108,6 +108,14 @@ These rules apply to the current repository `C:\kuguaHome\personal resource\stud
 5. In training-round Markdown files, question images must be embedded directly in the body by default, preferably using relative paths.
 6. If 游工 specifies a training-round file as the grading source, the agent must read that file first and grade strictly against its contents.
 7. Composite questions must preserve the complete `问题1 / 问题2 / 问题3` structure and must not leak answers in the prompt.
+8. When assembling a training round, the agent must prioritize coverage across as many chapter-relevant knowledge points and morning-question types as the local pool allows, instead of repeatedly selecting highly similar questions from only a small subset of points.
+9. This coverage-first rule does not override the local-pool and time-budget constraints. If full coverage is not achievable within the local repository and the round budget, the agent must still prefer the broadest feasible coverage and then explicitly report the uncovered knowledge points and question types instead of silently narrowing the round.
+10. After every newly assembled training round, the agent must report a quantified coverage summary in the chat for that round. At minimum, the report must include:
+   - the total number of questions and total blanks / scoring units in the generated round
+   - the chapter knowledge-point baseline used for this round, the number covered, the number not covered, and the coverage percentage
+   - the morning-question-type baseline used for this round, the number covered, the number not covered, and the coverage percentage
+   - the concrete uncovered knowledge points and uncovered question types that remain after this round
+11. The coverage baseline must be evidence-based. By default, it should be derived from the chapter-relevant local candidate pool actually inspected in the current round, rather than from unsupported memory or a vague global assumption. If the baseline is only partial because the local pool is sparse or the time budget is exhausted, the agent must say so explicitly.
 
 ### 2. Explanation After The User Answers
 1. After the user answers, provide detailed knowledge-point explanations for:
