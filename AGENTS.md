@@ -20,6 +20,16 @@ These rules apply to the current repository `C:\kuguaHome\personal resource\stud
    - then `5` afternoon case-analysis type lesson plans
 13. During the textbook-chapter phase, questions should be morning questions only. Do not add afternoon case-analysis questions into chapter-based rounds.
 14. Any older rule that implies "only 12 lesson plans in total" or "chapter rounds must include afternoon case-analysis questions" is superseded by the rules above.
+15. The later `5` afternoon case-analysis type lesson plans are fixed as `5` specialized lesson plans, one lesson for one major afternoon problem type, rather than a generic "afternoon stage".
+16. The `5` afternoon specialized lesson plans must follow this fixed order:
+   - `第13课：DFD / 结构化分析`
+   - `第14课：数据库设计`
+   - `第15课：UML / 面向对象分析设计`
+   - `第16课：设计模式`
+   - `第17课：算法与代码`
+17. Because 算法 is currently the weakest area, it must remain fixed as `第17课` and must not be moved earlier.
+18. These `5` afternoon specialized lesson plans must be organized by problem-type capability, not bound directly to a specific year's problem number.
+19. Existing or historical afternoon lesson-plan files must not be used as writing references for these `5` afternoon specialized lesson plans.
 
 ## Source And Storage Locations
 1. Lesson plans are divided into two phases:
@@ -33,6 +43,8 @@ These rules apply to the current repository `C:\kuguaHome\personal resource\stud
 7. This textbook-catalog reference is the default source for chapter directory lookup, chapter numbering confirmation, and quick textbook navigation.
 8. The local question-bank index is `C:\kuguaHome\personal resource\study\book\SoftwareExam\doc\Software-Designer-master\真题\xisai_md\xisai_md_总索引.md`.
 9. The primary local Markdown real-question repository is `C:\kuguaHome\personal resource\study\book\SoftwareExam\doc\Software-Designer-master\真题\xisai_md\题目`.
+10. The `5` afternoon specialized lesson plans from `第13课` to `第17课` must still be persisted only under `C:\kuguaHome\personal resource\study\book\SoftwareExam\doc\Software-Designer-master\课案\真题驱动`.
+11. The paired afternoon specialized training-round files must still be persisted only under `C:\kuguaHome\personal resource\study\book\SoftwareExam\doc\Software-Designer-master\真题\xisai_md\真题训练`.
 
 ## Teaching Workflow
 
@@ -65,6 +77,8 @@ These rules apply to the current repository `C:\kuguaHome\personal resource\stud
    - if the original source does not specify the score for each sub-question, use your inferred score
 13. For each round, the total time budget for textbook-positioning, question-searching, and question-assembly must not exceed 15 minutes.
 14. If the agent cannot find enough chapter-matched morning questions within that 15-minute budget, it must not force the target count. It must report the exact number found, the missing count, and the reason.
+15. If 游工 explicitly enters the afternoon case-analysis attack phase, the agent must stop advancing by textbook chapter and instead determine whether the next step is to start a new afternoon specialized lesson or continue the previous afternoon specialized lesson.
+16. When starting or continuing an afternoon specialized lesson, the agent must still follow the local retrieval path `xisai_md_总索引.md -> local case-analysis Markdown repository` and must not skip the local index to search ad hoc sources first.
 
 ### 1B. Textbook Chapter Lesson-Plan Authoring Method
 1. This method is mandatory for the `12` textbook-chapter lesson plans and should be reused chapter by chapter according to the textbook catalog.
@@ -99,23 +113,48 @@ These rules apply to the current repository `C:\kuguaHome\personal resource\stud
 3. The local index plus local Markdown repository is the default and preferred path for question retrieval in this project.
 4. If the local index/local Markdown repository does not contain enough suitable questions, the agent must pause and consult 游工 with a brief gap summary and concrete options, instead of silently switching to online sourcing.
 5. Only after 游工 explicitly approves expansion beyond the local index/local repository may the agent use `$softwareexam-question-sourcing` or other online sourcing paths.
+6. When building the first template round for an afternoon specialized lesson, the agent should preferentially select local case-analysis files with better completeness and answer quality.
+7. Files such as `2024下半年案例题` and `2025上半年案例题`, which are recall-based or incomplete, must be treated as later supplementary or sprint-drill material rather than the primary first-template source.
 
 ### 1C. Training Round File Workflow
 1. Training-round question sets must be generated under `doc/Software-Designer-master/真题/xisai_md/真题训练/`.
 2. Unless 游工 explicitly requests a chat-only preview, question delivery for learning rounds, practice rounds, and newly assembled training sets must be persisted to this directory instead of being fully printed in the chat box.
-3. When 游工 does not specify a filename but the task is to assemble a round of questions, the agent must create or update the appropriate file in this directory using the `章节 + 第x轮真题训练` naming pattern, for example `第4章第三轮真题训练.md`.
+3. When 游工 does not specify a filename but the task is to assemble a round of questions, the agent must create or update the appropriate file in this directory using the appropriate naming pattern:
+   - textbook-chapter rounds use `章节 + 第x轮真题训练`, for example `第4章第三轮真题训练.md`
+   - afternoon specialized rounds use `课次 + 第x轮真题训练`, for example `第13课第一轮真题训练.md`
 4. In training-round Markdown files, every option of every question must occupy its own line.
 5. In training-round Markdown files, question images must be embedded directly in the body by default, preferably using relative paths.
-6. If 游工 specifies a training-round file as the grading source, the agent must read that file first and grade strictly against its contents.
-7. Composite questions must preserve the complete `问题1 / 问题2 / 问题3` structure and must not leak answers in the prompt.
-8. When assembling a training round, the agent must prioritize coverage across as many chapter-relevant knowledge points and morning-question types as the local pool allows, instead of repeatedly selecting highly similar questions from only a small subset of points.
-9. This coverage-first rule does not override the local-pool and time-budget constraints. If full coverage is not achievable within the local repository and the round budget, the agent must still prefer the broadest feasible coverage and then explicitly report the uncovered knowledge points and question types instead of silently narrowing the round.
-10. After every newly assembled training round, the agent must report a quantified coverage summary in the chat for that round. At minimum, the report must include:
-   - the total number of questions and total blanks / scoring units in the generated round
-   - the chapter knowledge-point baseline used for this round, the number covered, the number not covered, and the coverage percentage
-   - the morning-question-type baseline used for this round, the number covered, the number not covered, and the coverage percentage
-   - the concrete uncovered knowledge points and uncovered question types that remain after this round
-11. The coverage baseline must be evidence-based. By default, it should be derived from the chapter-relevant local candidate pool actually inspected in the current round, rather than from unsupported memory or a vague global assumption. If the baseline is only partial because the local pool is sparse or the time budget is exhausted, the agent must say so explicitly.
+6. Training-round Markdown files must hide answers and analyses by default. They may contain only the question body, images, score information, blanks, and answering instructions, and must not expose reference answers, analyses, or conclusion-level hints.
+7. If 游工 specifies a training-round file as the grading source, the agent must read that file first and grade strictly against its contents.
+8. Composite questions must preserve the complete `问题1 / 问题2 / 问题3` structure and must not leak answers in the prompt.
+9. When assembling a training round, the agent must prioritize coverage across as many chapter-relevant knowledge points and morning-question types as the local pool allows, instead of repeatedly selecting highly similar questions from only a small subset of points.
+10. This coverage-first rule does not override the local-pool and time-budget constraints. If full coverage is not achievable within the local repository and the round budget, the agent must still prefer the broadest feasible coverage and then explicitly report the uncovered knowledge points and question types instead of silently narrowing the round.
+11. After every newly assembled training round, the agent must report a quantified coverage summary in the chat for that round. At minimum, the report must include:
+    - the total number of questions and total blanks / scoring units in the generated round
+    - for textbook-chapter rounds: the chapter knowledge-point baseline used for this round, the number covered, the number not covered, and the coverage percentage
+    - for textbook-chapter rounds: the morning-question-type baseline used for this round, the number covered, the number not covered, and the coverage percentage
+    - for afternoon specialized rounds: the specialized-lesson knowledge-point or scoring-point baseline used for this round, the number covered, the number not covered, and the coverage percentage
+    - for afternoon specialized rounds: the afternoon sub-type or ask-pattern baseline used for this round, the number covered, the number not covered, and the coverage percentage
+    - the concrete uncovered knowledge points, scoring points, or question types that remain after this round
+12. The coverage baseline must be evidence-based. By default, it should be derived from the local candidate pool actually inspected for the current round, rather than from unsupported memory or a vague global assumption. If the baseline is only partial because the local pool is sparse or the time budget is exhausted, the agent must say so explicitly.
+
+### 1D. Afternoon Case-Analysis Lesson-Plan Authoring Method
+1. This method is mandatory for the `5` afternoon specialized lesson plans from `第13课` to `第17课`.
+2. Each afternoon specialized lesson plan must be written for exactly one major afternoon problem type and must not mix multiple major problem types into the same lesson body.
+3. The required lesson-body structure is limited to:
+   - 本课定位
+   - 本课目标
+   - 前置知识
+   - 核心考法识别
+   - 固定答题步骤
+   - 判分点模板
+   - 常见失分点
+   - 过关标准
+4. Afternoon specialized lesson-plan bodies must not include:
+   - `课后训练`
+   - `本地原题样本`
+   - any material that directly exposes answers or analyses for the paired training questions
+5. For afternoon specialized lessons, the lesson plan is responsible for explaining methods, templates, and scoring logic, while the training-round file is responsible for providing the hidden-answer question set and the answering entrypoint. These two artifacts must remain separate.
 
 ### 2. Explanation After The User Answers
 1. After the user answers, provide detailed knowledge-point explanations for:
