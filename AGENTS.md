@@ -138,6 +138,16 @@ These rules apply to the current repository `C:\kuguaHome\personal resource\stud
     - the concrete uncovered knowledge points, scoring points, or question types that remain after this round
 12. The coverage baseline must be evidence-based. By default, it should be derived from the local candidate pool actually inspected for the current round, rather than from unsupported memory or a vague global assumption. If the baseline is only partial because the local pool is sparse or the time budget is exhausted, the agent must say so explicitly.
 
+### 1C-1. Drawing-Answer Training File Workflow
+1. When a training question requires drawing, diagram completion, or direct editing of a provided figure, the agent must package the training round as a folder under `doc/Software-Designer-master/真题/xisai_md/真题训练/` rather than leaving only a standalone Markdown file.
+2. The folder name must use the training-round file stem exactly. For example, `第14课第一轮真题训练.md` should be stored as `doc/Software-Designer-master/真题/xisai_md/真题训练/第14课第一轮真题训练/第14课第一轮真题训练.md`.
+3. The Markdown training file must remain the question entrypoint and must still hide answers and analyses by default.
+4. For each question that requires a drawing answer, create an editable `.drawio` answer file in the same folder. The file name pattern is `<training-round-file-stem>-<question-label>.drawio`, for example `第14课第一轮真题训练-训练一.drawio`.
+5. Do not create a duplicate `题干原图.png` in the training folder by default. The original question image should remain referenced from the Markdown file or the local source question file.
+6. The `.drawio` file is the user's answer workspace. It should contain a reasonable editable canvas for completing the diagram, and may reference or visually reproduce the necessary question figure only to the extent needed for answering.
+7. The agent must not modify original question-bank image assets under `题目素材/` for answer collection. All user-editable drawing-answer artifacts must live under the corresponding training-round folder.
+8. When grading a drawing-answer question, the agent must read the training Markdown first, then inspect the user's saved `.drawio` answer file, and finally grade against the local reference answer.
+
 ### 1D. Afternoon Case-Analysis Lesson-Plan Authoring Method
 1. This method is mandatory for the `5` afternoon specialized lesson plans from `第13课` to `第17课`.
 2. Each afternoon specialized lesson plan must be written for exactly one major afternoon problem type and must not mix multiple major problem types into the same lesson body.
