@@ -1,0 +1,33 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="sdes-round2-q2" name="试题二 ER 作答">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title" value="试题二 ER 图作答区：请补充3个联系及联系类型" style="text;html=1;strokeColor=none;fillColor=none;fontSize=18;fontStyle=1" vertex="1" parent="1"><mxGeometry x="40" y="30" width="700" height="40" as="geometry"/></mxCell>
+        <mxCell id="hint" value="可编辑说明：实体和联系均可拖动修改；请在菱形中填写联系名，在连线两端填写 1、n、m 等基数。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14" vertex="1" parent="1"><mxGeometry x="40" y="80" width="760" height="60" as="geometry"/></mxCell>
+        <mxCell id="customer" value="客户" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="90" y="190" width="120" height="60" as="geometry"/></mxCell>
+        <mxCell id="car" value="车辆" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="360" y="190" width="120" height="60" as="geometry"/></mxCell>
+        <mxCell id="dept" value="部门" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="90" y="420" width="120" height="60" as="geometry"/></mxCell>
+        <mxCell id="employee" value="员工" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="360" y="420" width="120" height="60" as="geometry"/></mxCell>
+        <mxCell id="repair" value="维修单" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1"><mxGeometry x="640" y="420" width="120" height="60" as="geometry"/></mxCell>
+        <mxCell id="rel1" value="联系1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00" vertex="1" parent="1"><mxGeometry x="250" y="195" width="80" height="50" as="geometry"/></mxCell>
+        <mxCell id="rel2" value="联系2" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00" vertex="1" parent="1"><mxGeometry x="250" y="425" width="80" height="50" as="geometry"/></mxCell>
+        <mxCell id="rel3" value="联系3" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00" vertex="1" parent="1"><mxGeometry x="520" y="425" width="80" height="50" as="geometry"/></mxCell>
+        <mxCell id="e1" value="" style="html=1;rounded=0;strokeWidth=2" edge="1" parent="1" source="customer" target="rel1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" value="" style="html=1;rounded=0;strokeWidth=2" edge="1" parent="1" source="rel1" target="car"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" value="" style="html=1;rounded=0;strokeWidth=2" edge="1" parent="1" source="dept" target="rel2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" value="" style="html=1;rounded=0;strokeWidth=2" edge="1" parent="1" source="rel2" target="employee"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" value="" style="html=1;rounded=0;strokeWidth=2" edge="1" parent="1" source="employee" target="rel3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" value="" style="html=1;rounded=0;strokeWidth=2" edge="1" parent="1" source="rel3" target="repair"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="card1a" value="基数" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666" vertex="1" parent="1"><mxGeometry x="210" y="160" width="50" height="30" as="geometry"/></mxCell>
+        <mxCell id="card1b" value="基数" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666" vertex="1" parent="1"><mxGeometry x="330" y="160" width="50" height="30" as="geometry"/></mxCell>
+        <mxCell id="card2a" value="基数" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666" vertex="1" parent="1"><mxGeometry x="210" y="485" width="50" height="30" as="geometry"/></mxCell>
+        <mxCell id="card2b" value="基数" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666" vertex="1" parent="1"><mxGeometry x="330" y="485" width="50" height="30" as="geometry"/></mxCell>
+        <mxCell id="card3a" value="基数" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666" vertex="1" parent="1"><mxGeometry x="480" y="485" width="50" height="30" as="geometry"/></mxCell>
+        <mxCell id="card3b" value="基数" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666" vertex="1" parent="1"><mxGeometry x="600" y="485" width="50" height="30" as="geometry"/></mxCell>
+        <mxCell id="q4" value="问题4补充区：如果维修单与维修工关系变化，请在这里画新联系或写新关系模式。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=14" vertex="1" parent="1"><mxGeometry x="820" y="190" width="280" height="160" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
