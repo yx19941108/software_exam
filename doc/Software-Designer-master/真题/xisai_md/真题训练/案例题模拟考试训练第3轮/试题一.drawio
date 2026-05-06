@@ -1,0 +1,13 @@
+<mxfile host="app.diagrams.net" modified="2026-05-06T00:00:00.000Z" agent="Codex" version="24.7.17">
+  <diagram id="q1-level0" name="图1-2 0层数据流图">
+    <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="860" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="q1-original-figure" value="" style="shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;image=../../题目素材/2019上半年案例题/sdYtQVxqI1.png;editable=0;movable=0;resizable=0;rotatable=0;deletable=0;locked=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="827" height="826" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

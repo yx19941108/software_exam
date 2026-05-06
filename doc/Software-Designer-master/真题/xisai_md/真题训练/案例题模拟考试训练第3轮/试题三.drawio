@@ -1,0 +1,50 @@
+<mxfile host="app.diagrams.net" modified="2026-05-06T00:00:00.000Z" agent="Codex" version="24.7.17">
+  <diagram id="q3-usecase" name="图3-1 用例图">
+    <mxGraphModel dx="1200" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="650" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="customer" value="Customer" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" vertex="1" parent="1"><mxGeometry x="60" y="110" width="40" height="80" as="geometry"/></mxCell>
+        <mxCell id="a1" value="A1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" vertex="1" parent="1"><mxGeometry x="780" y="110" width="40" height="80" as="geometry"/></mxCell>
+        <mxCell id="a2" value="A2" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" vertex="1" parent="1"><mxGeometry x="780" y="450" width="40" height="80" as="geometry"/></mxCell>
+        <mxCell id="a3" value="A3" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" vertex="1" parent="1"><mxGeometry x="60" y="450" width="40" height="80" as="geometry"/></mxCell>
+        <mxCell id="u1" value="U1" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="190" y="60" width="170" height="60" as="geometry"/></mxCell>
+        <mxCell id="u2" value="U2" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="190" y="180" width="170" height="60" as="geometry"/></mxCell>
+        <mxCell id="u3" value="U3" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="190" y="300" width="170" height="60" as="geometry"/></mxCell>
+        <mxCell id="reorder" value="Reorder books" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="520" y="60" width="180" height="60" as="geometry"/></mxCell>
+        <mxCell id="promote" value="Promote books" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="520" y="180" width="180" height="60" as="geometry"/></mxCell>
+        <mxCell id="add" value="Add books" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="520" y="300" width="180" height="60" as="geometry"/></mxCell>
+        <mxCell id="pick" value="Produce picklist" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="190" y="460" width="180" height="60" as="geometry"/></mxCell>
+        <mxCell id="stock" value="Update stock" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="520" y="460" width="180" height="60" as="geometry"/></mxCell>
+        <mxCell id="e01" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="customer" target="u1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e02" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="customer" target="u2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e03" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="customer" target="u3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e04" value="&lt;&lt;extend&gt;&gt;" style="endArrow=open;dashed=1;html=1;rounded=0;" edge="1" parent="1" source="u2" target="u3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e05" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="a1" target="reorder"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e06" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="a1" target="promote"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e07" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="a1" target="add"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e08" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="a3" target="pick"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e09" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="a2" target="stock"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="title1" value="图3-1 用例图" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="350" y="590" width="180" height="30" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="q3-class" name="图3-2 初始类图（部分）">
+    <mxGraphModel dx="1200" dy="750" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="600" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="c1" value="&lt;b&gt;C1&lt;/b&gt;&lt;hr&gt;+name&lt;br&gt;+address&lt;br&gt;+email&lt;hr&gt;" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="60" y="80" width="160" height="140" as="geometry"/></mxCell>
+        <mxCell id="c2" value="&lt;b&gt;C2&lt;/b&gt;&lt;hr&gt;&lt;hr&gt;" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="360" y="80" width="160" height="90" as="geometry"/></mxCell>
+        <mxCell id="c3" value="&lt;b&gt;C3&lt;/b&gt;&lt;hr&gt;+title&lt;br&gt;+author&lt;br&gt;+introduction&lt;hr&gt;" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="650" y="80" width="170" height="140" as="geometry"/></mxCell>
+        <mxCell id="ordered" value="&lt;b&gt;OrderedBook&lt;/b&gt;&lt;hr&gt;+quantity&lt;hr&gt;" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="360" y="300" width="160" height="100" as="geometry"/></mxCell>
+        <mxCell id="catalog" value="&lt;b&gt;Catalog&lt;/b&gt;&lt;hr&gt;&lt;hr&gt;" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="650" y="340" width="170" height="90" as="geometry"/></mxCell>
+        <mxCell id="r1" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="c1" target="c2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="r2" value="" style="endArrow=none;startArrow=diamondThin;startFill=0;html=1;rounded=0;" edge="1" parent="1" source="c2" target="ordered"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="r3" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="ordered" target="c3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="r4" value="" style="endArrow=none;startArrow=diamondThin;startFill=0;html=1;rounded=0;" edge="1" parent="1" source="c3" target="catalog"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="title2" value="图3-2 初始类图（部分）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;" vertex="1" parent="1"><mxGeometry x="340" y="535" width="220" height="30" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

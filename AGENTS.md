@@ -125,7 +125,7 @@ These rules apply to the current repository `C:\kuguaHome\personal resource\stud
 4. In training-round Markdown files, every option of every question must occupy its own line.
 5. In training-round Markdown files, question images must be embedded directly in the body by default, preferably using relative paths.
 6. Training-round Markdown files must hide answers and analyses by default. They may contain only the question body, images, score information, blanks, and answering instructions, and must not expose reference answers, analyses, or conclusion-level hints.
-7. If 游工 specifies a training-round file as the grading source, the agent must read that file first and grade strictly against its contents.
+7. If 游工 specifies a training-round file as the grading source, the agent must read that file first and grade strictly against its contents and the grading rules in `1C-2`.
 8. Composite questions must preserve the complete `问题1 / 问题2 / 问题3` structure and must not leak answers in the prompt.
 9. When assembling a training round, the agent must prioritize coverage across as many chapter-relevant knowledge points and morning-question types as the local pool allows, instead of repeatedly selecting highly similar questions from only a small subset of points.
 10. This coverage-first rule does not override the local-pool and time-budget constraints. If full coverage is not achievable within the local repository and the round budget, the agent must still prefer the broadest feasible coverage and then explicitly report the uncovered knowledge points and question types instead of silently narrowing the round.
@@ -139,14 +139,30 @@ These rules apply to the current repository `C:\kuguaHome\personal resource\stud
 12. The coverage baseline must be evidence-based. By default, it should be derived from the local candidate pool actually inspected for the current round, rather than from unsupported memory or a vague global assumption. If the baseline is only partial because the local pool is sparse or the time budget is exhausted, the agent must say so explicitly.
 
 ### 1C-1. Drawing-Answer Training File Workflow
-1. When a training question requires drawing, diagram completion, or direct editing of a provided figure, the agent must package the training round as a folder under `doc/Software-Designer-master/真题/xisai_md/真题训练/` rather than leaving only a standalone Markdown file.
-2. The folder name must use the training-round file stem exactly. For example, `第14课第一轮真题训练.md` should be stored as `doc/Software-Designer-master/真题/xisai_md/真题训练/第14课第一轮真题训练/第14课第一轮真题训练.md`.
-3. The Markdown training file must remain the question entrypoint and must still hide answers and analyses by default.
-4. For each question that requires a drawing answer, create an editable `.drawio` answer file in the same folder. The file name pattern is `<training-round-file-stem>-<question-label>.drawio`, for example `第14课第一轮真题训练-训练一.drawio`.
-5. Do not create a duplicate `题干原图.png` in the training folder by default. The original question image should remain referenced from the Markdown file or the local source question file.
-6. The `.drawio` file is the user's answer workspace. It should contain a reasonable editable canvas for completing the diagram, and may reference or visually reproduce the necessary question figure only to the extent needed for answering.
-7. The agent must not modify original question-bank image assets under `题目素材/` for answer collection. All user-editable drawing-answer artifacts must live under the corresponding training-round folder.
-8. When grading a drawing-answer question, the agent must read the training Markdown first, then inspect the user's saved `.drawio` answer file, and finally grade against the local reference answer.
+1. Before creating any `.drawio` answer file, decide strictly from the question wording whether the answer requires drawing. Do not infer drawing only from the broad problem type such as DFD, database design, or UML.
+2. Create `.drawio` only when the stem explicitly asks the candidate to draw, complete, supplement, modify, or directly edit a diagram, such as `补充 E-R 图`, `完善实体联系图`, `对图进行补充`, `画出修改后的实体间联系和联系类型`, `补充类图/用例图/顺序图/活动图/状态图/通信图`, or equivalent wording.
+3. Do not create `.drawio` when the stem only asks for textual or tabular answers, even if a diagram is shown in the stem. For example, DFD questions that ask for `数据流名称 / 起点 / 终点`, entity names, data-store names, relationship names, class names, participant names, use-case names, code blanks, algorithm strategy, complexity, or reason explanations must be answered in Markdown text/table areas unless the stem also explicitly requires diagram completion.
+4. When a training question requires drawing, diagram completion, or direct editing of a provided figure under the criteria above, the agent must package the training round as a folder under `doc/Software-Designer-master/真题/xisai_md/真题训练/` rather than leaving only a standalone Markdown file.
+5. The folder name must use the training-round file stem exactly. For example, `第14课第一轮真题训练.md` should be stored as `doc/Software-Designer-master/真题/xisai_md/真题训练/第14课第一轮真题训练/第14课第一轮真题训练.md`.
+6. The Markdown training file must remain the question entrypoint and must still hide answers and analyses by default.
+7. For each question that requires a drawing answer, create an editable `.drawio` answer file in the same folder. The file name pattern is `<training-round-file-stem>-<question-label>.drawio`, for example `第14课第一轮真题训练-训练一.drawio`.
+8. Do not create a duplicate `题干原图.png` in the training folder by default. The original question image should remain referenced from the Markdown file or the local source question file.
+9. The `.drawio` file is the user's answer workspace. It should contain a reasonable editable canvas for completing the diagram, and may reference or visually reproduce the necessary question figure only to the extent needed for answering.
+10. The agent must not modify original question-bank image assets under `题目素材/` for answer collection. All user-editable drawing-answer artifacts must live under the corresponding training-round folder.
+11. When grading a drawing-answer question, the agent must read the training Markdown first, then inspect the user's saved `.drawio` answer file, and finally grade against the local reference answer.
+
+### 1C-2. Case-Analysis Grading And Scoring Workflow
+1. These rules apply when grading software-designer afternoon case-analysis answers. If they conflict with older grading or explanation wording in this file, this subsection takes precedence for case-analysis grading.
+2. The agent must separate three evidence levels: `local question-bank reference answer / explanation`, `publicly verifiable stem or explanation`, and `simulated grading inference`. Do not present local question-bank answers or inferred scoring as official internal marking rules unless an official source has been verified.
+3. The local question-bank reference answer is the primary scoring baseline, but equivalent expressions must be evaluated by meaning and exam scoring point rather than by exact wording alone.
+4. For DFD, database-design, UML, and other diagram-related answers, first identify the user's actual answer elements before scoring: element type, name, line/edge, direction, relationship type, multiplicity, data-flow start and end, primary key, foreign key, and attribute ownership.
+5. Grade by sub-question. For each sub-question, report: full score, user's score, deduction points, correct scoring points, and whether the error is severe.
+6. Hard errors must be deducted strictly: wrong direction, wrong relationship type, wrong multiplicity, external-entity/process/data-store confusion, missing data flow, primary-key or foreign-key error, class/attribute/method placed in the wrong compartment, and UML relationship symbol error.
+7. Equivalent-expression handling must be explicit. For example, a DFD data store named `信息存储` may receive credit when its business meaning matches the reference answer; a data flow with correct start and end may receive credit even if its name is slightly nonstandard.
+8. Report three score estimates when uncertainty exists: `conservative score` for strict wording and notation, `normal score` for common scoring-point and reasonable-equivalence grading, and `lenient score` for the upper bound that still respects hard errors.
+9. Always state that `conservative / normal / lenient` scores are simulated grading ranges, not official internal marking rules.
+10. When a scoring judgment has no official detailed rubric, say it is inferred from the local reference answer and common scoring-point practice. Do not say an answer definitely receives zero or full credit unless the evidence supports that certainty.
+11. If 游工 challenges a grading result, re-check the stem, the local reference answer including answer images, and the user's original Markdown/drawio answer. If the prior grading was wrong, correct it directly and update the score.
 
 ### 1D. Afternoon Case-Analysis Lesson-Plan Authoring Method
 1. This method is mandatory for the `5` afternoon specialized lesson plans from `第13课` to `第17课`.
