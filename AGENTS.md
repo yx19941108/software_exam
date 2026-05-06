@@ -81,31 +81,9 @@ These rules apply to the current repository `C:\kuguaHome\personal resource\stud
 16. When starting or continuing an afternoon specialized lesson, the agent must still follow the local retrieval path `xisai_md_总索引.md -> local case-analysis Markdown repository` and must not skip the local index to search ad hoc sources first.
 
 ### 1B. Textbook Chapter Lesson-Plan Authoring Method
-1. This method is mandatory for the `12` textbook-chapter lesson plans and should be reused chapter by chapter according to the textbook catalog.
-2. After the target textbook chapter is confirmed, the agent must first retrieve the chapter-matched local morning multiple-choice questions from the local index and the local Markdown question repository. Do not begin by drafting explanations from memory or from old lesson plans.
-3. The chapter lesson plan must be question-driven. The agent should first assemble the relevant local objective-question pool for that chapter, then derive the lesson-plan structure from the real question coverage.
-4. The agent must extract the tested knowledge points from the collected objective questions and assign each question to exactly one primary knowledge point for weighting purposes. Do not count a single question multiple times across different knowledge points when calculating weights.
-5. The default weight definition is: `knowledge-point weight = number of objective questions primarily testing that knowledge point / total number of chapter-related objective questions in the selected pool`.
-6. The lesson plan must sort knowledge points by weight from high to low. Heavier knowledge points must appear earlier and lighter knowledge points later.
-7. Each knowledge-point section title must explicitly display its weight in a clear form such as `权值：x/y` and may also include the approximate percentage when helpful.
-8. Each knowledge-point section must include detailed beginner-oriented explanation, not outline-only prompts. At minimum, it should cover:
-   - what the concept means
-   - why it matters in this chapter
-   - the core distinctions, formulas, algorithms, or judgment rules involved
-   - a recommended solving procedure
-   - common traps or easy-mistake points
-9. If the section mentions a term, abbreviation, algorithm name, data structure name, or mechanism name that a beginner may not already understand, the lesson plan must explain it in place. Do not leave key terms as unexplained labels.
-10. The quality bar is: after reading the lesson plan, the user should not need to go back to the textbook just to understand the core knowledge points named in the lesson plan.
-11. Each knowledge-point section must include `1` to `2` representative objective real-question examples from the local repository showing how that knowledge point is tested.
-12. Real-question examples must be embedded directly in the lesson plan body. Do not only reference a filename and question number. Include:
-   - the question stem
-   - the options
-   - the correct answer
-   - a detailed explanation, preferably including why the correct option is correct and why the wrong options are wrong when that adds teaching value
-13. When the local repository contains enough questions, representative examples should preferentially come from roughly the most recent `10` years. If older questions are used, prefer them only when they better cover a high-value knowledge point.
-14. The lesson plan should also include a brief chapter-level summary of the local objective-question distribution so the ordering and emphasis are evidence-based rather than impression-based.
-15. The agent must self-review the lesson plan from a beginner perspective before finalizing it. If a beginner reader would still not understand a named concept, algorithm, distinction, formula, or solving step without opening the textbook, the lesson plan is not complete and must be expanded before delivery.
-16. If a chapter has too few local questions to support a full weight-based breakdown, the agent must still follow this method as far as the evidence allows, clearly state the reduced sample size, and explain which knowledge points therefore have lower confidence.
+1. When writing or updating textbook chapter lesson plans or afternoon specialized lesson plans, first read and follow `C:\kuguaHome\personal resource\study\book\SoftwareExam\doc\agent\softwareexam-policy\lesson-authoring-policy.md`.
+2. Keep lesson plans question-driven, evidence-weighted, beginner-oriented, and separated from hidden-answer training files.
+3. Do not move long lesson-authoring examples back into this `AGENTS.md`; update the policy file instead.
 
 ### 1A. Local Question-Bank Lookup Workflow
 1. When the task is to search, retrieve, assemble, or reuse real questions for teaching, practice, or mock-question selection, the agent must first open and use `doc/Software-Designer-master/真题/xisai_md/xisai_md_总索引.md` as the primary entrypoint.
@@ -117,70 +95,20 @@ These rules apply to the current repository `C:\kuguaHome\personal resource\stud
 7. Files such as `2024下半年案例题` and `2025上半年案例题`, which are recall-based or incomplete, must be treated as later supplementary or sprint-drill material rather than the primary first-template source.
 
 ### 1C. Training Round File Workflow
-1. Training-round question sets must be generated under `doc/Software-Designer-master/真题/xisai_md/真题训练/`.
-2. Unless 游工 explicitly requests a chat-only preview, question delivery for learning rounds, practice rounds, and newly assembled training sets must be persisted to this directory instead of being fully printed in the chat box.
-3. When 游工 does not specify a filename but the task is to assemble a round of questions, the agent must create or update the appropriate file in this directory using the appropriate naming pattern:
-   - textbook-chapter rounds use `章节 + 第x轮真题训练`, for example `第4章第三轮真题训练.md`
-   - afternoon specialized rounds use `课次 + 第x轮真题训练`, for example `第13课第一轮真题训练.md`
-4. In training-round Markdown files, every option of every question must occupy its own line.
-5. In training-round Markdown files, question images must be embedded directly in the body by default, preferably using relative paths.
-6. Training-round Markdown files must hide answers and analyses by default. They may contain only the question body, images, score information, blanks, and answering instructions, and must not expose reference answers, analyses, or conclusion-level hints.
-7. If 游工 specifies a training-round file as the grading source, the agent must read that file first and grade strictly against its contents and the grading rules in `1C-2`.
-8. Composite questions must preserve the complete `问题1 / 问题2 / 问题3` structure and must not leak answers in the prompt.
-9. When assembling a training round, the agent must prioritize coverage across as many chapter-relevant knowledge points and morning-question types as the local pool allows, instead of repeatedly selecting highly similar questions from only a small subset of points.
-10. This coverage-first rule does not override the local-pool and time-budget constraints. If full coverage is not achievable within the local repository and the round budget, the agent must still prefer the broadest feasible coverage and then explicitly report the uncovered knowledge points and question types instead of silently narrowing the round.
-11. After every newly assembled training round, the agent must report a quantified coverage summary in the chat for that round. At minimum, the report must include:
-    - the total number of questions and total blanks / scoring units in the generated round
-    - for textbook-chapter rounds: the chapter knowledge-point baseline used for this round, the number covered, the number not covered, and the coverage percentage
-    - for textbook-chapter rounds: the morning-question-type baseline used for this round, the number covered, the number not covered, and the coverage percentage
-    - for afternoon specialized rounds: the specialized-lesson knowledge-point or scoring-point baseline used for this round, the number covered, the number not covered, and the coverage percentage
-    - for afternoon specialized rounds: the afternoon sub-type or ask-pattern baseline used for this round, the number covered, the number not covered, and the coverage percentage
-    - the concrete uncovered knowledge points, scoring points, or question types that remain after this round
-12. The coverage baseline must be evidence-based. By default, it should be derived from the local candidate pool actually inspected for the current round, rather than from unsupported memory or a vague global assumption. If the baseline is only partial because the local pool is sparse or the time budget is exhausted, the agent must say so explicitly.
+1. When assembling or updating any training round, mock exam, hidden-answer question file, or `.drawio` answer workspace, first read and follow `C:\kuguaHome\personal resource\study\book\SoftwareExam\doc\agent\softwareexam-policy\training-round-policy.md`.
+2. Training-round artifacts must remain under `doc/Software-Designer-master/真题/xisai_md/真题训练/`, hide answers and analyses, preserve composite-question structure, and report evidence-based coverage after assembly.
+3. `.drawio` files are allowed only when the question wording explicitly requires drawing, diagram completion, modification, or direct figure editing. DFD `数据流名称 / 起点 / 终点` questions are Markdown text/table answers unless the stem also explicitly requires diagram completion.
+4. If 游工 specifies a training-round file as the grading source, read that file first and apply the case-analysis grading policy below.
 
-### 1C-1. Drawing-Answer Training File Workflow
-1. Before creating any `.drawio` answer file, decide strictly from the question wording whether the answer requires drawing. Do not infer drawing only from the broad problem type such as DFD, database design, or UML.
-2. Create `.drawio` only when the stem explicitly asks the candidate to draw, complete, supplement, modify, or directly edit a diagram, such as `补充 E-R 图`, `完善实体联系图`, `对图进行补充`, `画出修改后的实体间联系和联系类型`, `补充类图/用例图/顺序图/活动图/状态图/通信图`, or equivalent wording.
-3. Do not create `.drawio` when the stem only asks for textual or tabular answers, even if a diagram is shown in the stem. For example, DFD questions that ask for `数据流名称 / 起点 / 终点`, entity names, data-store names, relationship names, class names, participant names, use-case names, code blanks, algorithm strategy, complexity, or reason explanations must be answered in Markdown text/table areas unless the stem also explicitly requires diagram completion.
-4. When a training question requires drawing, diagram completion, or direct editing of a provided figure under the criteria above, the agent must package the training round as a folder under `doc/Software-Designer-master/真题/xisai_md/真题训练/` rather than leaving only a standalone Markdown file.
-5. The folder name must use the training-round file stem exactly. For example, `第14课第一轮真题训练.md` should be stored as `doc/Software-Designer-master/真题/xisai_md/真题训练/第14课第一轮真题训练/第14课第一轮真题训练.md`.
-6. The Markdown training file must remain the question entrypoint and must still hide answers and analyses by default.
-7. For each question that requires a drawing answer, create an editable `.drawio` answer file in the same folder. The file name pattern is `<training-round-file-stem>-<question-label>.drawio`, for example `第14课第一轮真题训练-训练一.drawio`.
-8. Do not create a duplicate `题干原图.png` in the training folder by default. The original question image should remain referenced from the Markdown file or the local source question file.
-9. The `.drawio` file is the user's answer workspace. It should contain a reasonable editable canvas for completing the diagram, and may reference or visually reproduce the necessary question figure only to the extent needed for answering.
-10. The agent must not modify original question-bank image assets under `题目素材/` for answer collection. All user-editable drawing-answer artifacts must live under the corresponding training-round folder.
-11. When grading a drawing-answer question, the agent must read the training Markdown first, then inspect the user's saved `.drawio` answer file, and finally grade against the local reference answer.
-
-### 1C-2. Case-Analysis Grading And Scoring Workflow
-1. These rules apply when grading software-designer afternoon case-analysis answers. If they conflict with older grading or explanation wording in this file, this subsection takes precedence for case-analysis grading.
-2. The agent must separate three evidence levels: `local question-bank reference answer / explanation`, `publicly verifiable stem or explanation`, and `simulated grading inference`. Do not present local question-bank answers or inferred scoring as official internal marking rules unless an official source has been verified.
-3. The local question-bank reference answer is the primary scoring baseline, but equivalent expressions must be evaluated by meaning and exam scoring point rather than by exact wording alone.
-4. For DFD, database-design, UML, and other diagram-related answers, first identify the user's actual answer elements before scoring: element type, name, line/edge, direction, relationship type, multiplicity, data-flow start and end, primary key, foreign key, and attribute ownership.
-5. Grade by sub-question. For each sub-question, report: full score, user's score, deduction points, correct scoring points, and whether the error is severe.
-6. Hard errors must be deducted strictly: wrong direction, wrong relationship type, wrong multiplicity, external-entity/process/data-store confusion, missing data flow, primary-key or foreign-key error, class/attribute/method placed in the wrong compartment, and UML relationship symbol error.
-7. Equivalent-expression handling must be explicit. For example, a DFD data store named `信息存储` may receive credit when its business meaning matches the reference answer; a data flow with correct start and end may receive credit even if its name is slightly nonstandard.
-8. Report three score estimates when uncertainty exists: `conservative score` for strict wording and notation, `normal score` for common scoring-point and reasonable-equivalence grading, and `lenient score` for the upper bound that still respects hard errors.
-9. Always state that `conservative / normal / lenient` scores are simulated grading ranges, not official internal marking rules.
-10. When a scoring judgment has no official detailed rubric, say it is inferred from the local reference answer and common scoring-point practice. Do not say an answer definitely receives zero or full credit unless the evidence supports that certainty.
-11. If 游工 challenges a grading result, re-check the stem, the local reference answer including answer images, and the user's original Markdown/drawio answer. If the prior grading was wrong, correct it directly and update the score.
+### 1C-1. Case-Analysis Grading And Scoring Workflow
+1. When grading software-designer afternoon case-analysis answers, first read and follow `C:\kuguaHome\personal resource\study\book\SoftwareExam\doc\agent\softwareexam-policy\case-grading-policy.md`.
+2. This grading policy takes precedence over older grading or explanation wording in this file.
+3. Separate local reference answers, publicly verifiable evidence, and simulated scoring inference; do not present simulated score ranges as official internal marking rules.
+4. If 游工 challenges a grading result, re-check the stem, local reference answer including answer images, and the original Markdown/drawio answer before defending or correcting the score.
 
 ### 1D. Afternoon Case-Analysis Lesson-Plan Authoring Method
-1. This method is mandatory for the `5` afternoon specialized lesson plans from `第13课` to `第17课`.
-2. Each afternoon specialized lesson plan must be written for exactly one major afternoon problem type and must not mix multiple major problem types into the same lesson body.
-3. The required lesson-body structure is limited to:
-   - 本课定位
-   - 本课目标
-   - 前置知识
-   - 核心考法识别
-   - 固定答题步骤
-   - 判分点模板
-   - 常见失分点
-   - 过关标准
-4. Afternoon specialized lesson-plan bodies must not include:
-   - `课后训练`
-   - `本地原题样本`
-   - any material that directly exposes answers or analyses for the paired training questions
-5. For afternoon specialized lessons, the lesson plan is responsible for explaining methods, templates, and scoring logic, while the training-round file is responsible for providing the hidden-answer question set and the answering entrypoint. These two artifacts must remain separate.
+1. When writing or updating afternoon specialized lesson plans, read and follow `C:\kuguaHome\personal resource\study\book\SoftwareExam\doc\agent\softwareexam-policy\lesson-authoring-policy.md`.
+2. Afternoon specialized lesson plans explain methods, templates, and scoring logic. Training-round files provide hidden-answer questions and answering entrypoints. Keep them separate.
 
 ### 2. Explanation After The User Answers
 1. After the user answers, provide detailed knowledge-point explanations for:
