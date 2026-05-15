@@ -1,0 +1,22 @@
+<mxfile host="app.diagrams.net" modified="2026-05-15T00:00:00.000Z" agent="Codex" version="24.7.8">
+  <diagram id="q1-dfd" name="试题一">
+    <mxGraphModel dx="1400" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title" value="试题一 DFD 作答区" style="text;html=1;strokeColor=none;fillColor=none;fontSize=18;fontStyle=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="40" y="30" width="360" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="fig1" value="" style="shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;image=../../题目素材/2017上半年案例题/916b2e9c51574a6d908d6113fa5a5e18_.png;editable=0;movable=0;resizable=0;rotatable=0;deletable=0;locked=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="420" height="300" as="geometry"/>
+        </mxCell>
+        <mxCell id="fig2" value="" style="shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;image=../../题目素材/2017上半年案例题/1afe7f5c15a4454db3ccdcaaa7ad9216_.png;editable=0;movable=0;resizable=0;rotatable=0;deletable=0;locked=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="90" width="820" height="610" as="geometry"/>
+        </mxCell>
+        <mxCell id="workspace" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d0d7de;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="740" width="1280" height="360" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

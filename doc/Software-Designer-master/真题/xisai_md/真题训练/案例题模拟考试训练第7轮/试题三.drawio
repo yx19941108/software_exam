@@ -1,0 +1,28 @@
+<mxfile host="app.diagrams.net" modified="2026-05-15T00:00:00.000Z" agent="Codex" version="24.7.8">
+  <diagram id="q3-uml" name="试题三">
+    <mxGraphModel dx="1600" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title" value="试题三 UML 作答区" style="text;html=1;strokeColor=none;fillColor=none;fontSize=18;fontStyle=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="40" y="30" width="360" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="table1" value="" style="shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;image=../../题目素材/2017上半年案例题/QJC8X5BLCj.png;editable=0;movable=0;resizable=0;rotatable=0;deletable=0;locked=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="700" height="360" as="geometry"/>
+        </mxCell>
+        <mxCell id="table2" value="" style="shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;image=../../题目素材/2017上半年案例题/M6ESkFXDmh.png;editable=0;movable=0;resizable=0;rotatable=0;deletable=0;locked=1;" vertex="1" parent="1">
+          <mxGeometry x="780" y="90" width="360" height="230" as="geometry"/>
+        </mxCell>
+        <mxCell id="classfig" value="" style="shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;image=../../题目素材/2017上半年案例题/134ecc4d06dc453cb11df6d22617e8e1_.png;editable=0;movable=0;resizable=0;rotatable=0;deletable=0;locked=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="500" width="620" height="360" as="geometry"/>
+        </mxCell>
+        <mxCell id="statefig" value="" style="shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=1;aspect=fixed;image=../../题目素材/2017上半年案例题/b8794555f3b3454cab00ea542163d8f1_.png;editable=0;movable=0;resizable=0;rotatable=0;deletable=0;locked=1;" vertex="1" parent="1">
+          <mxGeometry x="720" y="500" width="560" height="340" as="geometry"/>
+        </mxCell>
+        <mxCell id="workspace" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d0d7de;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="900" width="1240" height="380" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
