@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>软件设计师综合知识模拟答题</title>
+  <style>
+    :root { --paper:#edf9df; --panel:#d7e8c8; --line:#91aa7f; --ink:#111; --blue:#2f76c4; --orange:#ff7a1a; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:"Microsoft YaHei", "SimSun", sans-serif; font-size:15px; }
+    .app { display:grid; grid-template-columns:220px 1fr 560px; height:100vh; min-width:1180px; }
+    aside { border-right:2px solid #8da47e; background:#e7f5d7; overflow:auto; }
+    .progress { padding:8px; border-bottom:1px solid var(--line); }
+    .progress-row { display:flex; align-items:center; gap:6px; }
+    .progress-box { flex:1; border:1px solid #37aa56; background:#fff; height:28px; display:flex; align-items:center; justify-content:center; color:#00a339; font-size:18px; }
+    .side-title { background:#cfe2bd; padding:9px 8px; font-weight:700; border-bottom:1px solid #aabd9a; }
+    .numbers { display:grid; grid-template-columns:repeat(5, 1fr); gap:6px; padding:8px 6px 20px; }
+    .num { height:32px; border:1px solid #6ba3d8; background:#f8fcff; cursor:pointer; font-family:Consolas, monospace; }
+    .num.active { border:2px solid var(--orange); background:#fff8ef; }
+    .num.done { background:#d9ebff; }
+    main { display:grid; grid-template-rows:auto 38px 1fr auto; border-right:1px solid #a4b993; min-width:0; }
+    .intro { padding:8px 10px; font-weight:700; line-height:1.8; background:#eef9df; border-bottom:1px solid #9caf8d; }
+    .toolbar { display:flex; align-items:center; gap:8px; padding:4px 8px; border-top:3px double #777; border-bottom:1px solid #9caf8d; background:#eef9df; color:#1473c3; }
+    .tool { border:1px solid #9bb8d6; background:#fff; padding:2px 8px; color:#1473c3; }
+    .stem { overflow:auto; padding:12px; line-height:1.8; }
+    .question-image { max-width:96%; display:block; margin:8px 0; border:1px solid #b9cba8; background:#fff; }
+    pre { background:#f8fff1; border:1px solid #b5c9a6; padding:10px; overflow:auto; }
+    .nav { display:flex; justify-content:space-between; padding:8px 12px; border-top:1px solid #a4b993; background:#e2f0d3; }
+    .nav button, .submit, .restart { border:1px solid #4d8ccb; background:#fff; padding:6px 14px; cursor:pointer; }
+    .submit { background:#e95b42; color:#fff; border-color:#a22d1e; }
+    .submit:disabled { background:#b8b8b8; border-color:#888; cursor:not-allowed; }
+    .restart { border-color:#6f8e56; color:#244b1e; }
+    .actions { display:flex; align-items:center; gap:8px; }
+    .right { display:grid; grid-template-rows:auto 1fr auto; min-width:0; }
+    .status { display:flex; justify-content:space-between; align-items:center; padding:8px 12px; border-bottom:1px solid #9caf8d; background:#e7f5d7; }
+    .timer { font-family:Consolas, monospace; font-size:20px; font-weight:700; color:#b42b20; }
+    .options { overflow:auto; padding:22px 24px; }
+    .option { display:grid; grid-template-columns:34px 30px 1fr; gap:8px; align-items:start; margin-bottom:20px; cursor:pointer; line-height:1.7; }
+    .option input { width:17px; height:17px; margin-top:4px; }
+    .option .letter { font-weight:700; }
+    .option.selected { background:#dff0ff; outline:1px solid #77a7d8; }
+    .source { color:#53644b; font-size:13px; padding:8px 12px; border-top:1px solid #9caf8d; }
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside>
+    <div class="progress"><div class="progress-row"><span>作答进度:</span><div id="progressBox" class="progress-box">0%</div></div></div>
+    <div class="side-title">一、单项选择题</div>
+    <div id="numbers" class="numbers"></div>
+  </aside>
+  <main>
+    <div class="intro">
+      <div>1. 本试卷共有75道选择题，每题1分，满分75分。</div>
+      <div>2. 每题只有一个最佳选项。选择题作答时间2小时，剩余30分钟后可提前交卷；到时自动交卷并进入案例题。</div>
+    </div>
+    <div class="toolbar"><button class="tool" type="button">⊕ 放大</button><button class="tool" type="button">⊖ 缩小</button><button class="tool" type="button">▣ 强调显示</button><button class="tool" type="button">▤ 取消强调</button></div>
+    <section id="stem" class="stem"></section>
+    <div class="nav"><button id="prevBtn" type="button">上一题</button><button id="nextBtn" type="button">下一题</button></div>
+  </main>
+  <section class="right">
+    <div class="status"><span id="currentLabel">第1题</span><span class="timer" id="timer">02:00:00</span><span class="actions"><button id="restartBtn" class="restart" type="button">重新开始</button><button id="submitBtn" class="submit" disabled type="button">交卷</button></span></div>
+    <div id="options" class="options"></div>
+    <div id="source" class="source"></div>
+  </section>
+</div>
+<script>
+const QUESTIONS = [{"id":"2025下半年选择题-2","sourceFile":"2025下半年选择题.md","sourceQuestionNo":2,"stem":"【考生回忆版】\r\n下列关于报文摘要的叙述中，错误的是（　）。","options":[{"key":"A","text":"在物联网环境中，可以为资源受限的传感器生成轻量级摘要"},{"key":"B","text":"对电子文档生成摘要，接收方用私钥解密"},{"key":"C","text":"对发送方报文生成的摘要值，接收方应重新计算并与原始摘要比对"},{"key":"D","text":"报文摘要仅用于验证完整性，传输数据仍需TLS加密"}],"range":"计算机系统基础","examNo":1},{"id":"2025下半年选择题-3","sourceFile":"2025下半年选择题.md","sourceQuestionNo":3,"stem":"【考生回忆版】\r\n（　）是评估软件可维护性的关键度量。","options":[{"key":"A","text":"用户数量"},{"key":"B","text":"功能点数量"},{"key":"C","text":"数据库容量"},{"key":"D","text":"平均修复时间(MTTR)"}],"range":"计算机系统基础","examNo":2},{"id":"2025下半年选择题-4","sourceFile":"2025下半年选择题.md","sourceQuestionNo":4,"stem":"【考生回忆版】\r\n使用SPOOLing技术的主要目的是（　）。","options":[{"key":"A","text":"将独占设备虚拟为共享设备"},{"key":"B","text":"提高进程并发度"},{"key":"C","text":"加快内存访问速度"},{"key":"D","text":"提高CPU利用率"}],"range":"计算机系统基础","examNo":3},{"id":"2025下半年选择题-5","sourceFile":"2025下半年选择题.md","sourceQuestionNo":5,"stem":"【考生回忆版】\r\n以下关于软件著作权产生时间的叙述中，正确的是（　）。","options":[{"key":"A","text":"自开发者获得软件著作权登记证书起"},{"key":"B","text":"自开发计划文档完成时"},{"key":"C","text":"自软件首次公开发表时"},{"key":"D","text":"自软件开发完成之日起"}],"range":"计算机系统基础","examNo":4},{"id":"2025上半年选择题-1","sourceFile":"2025上半年选择题.md","sourceQuestionNo":1,"stem":"【考生回忆版】利用栈对算术表达式a*（b+c）-e求值，设栈初始时为空，则暂存操作数（或运算结果）的栈中最多需存放（　）个操作数（或运算结果）。","options":[{"key":"A","text":"3"},{"key":"B","text":"1"},{"key":"C","text":"2"},{"key":"D","text":"4"}],"range":"计算机系统基础","examNo":5},{"id":"2025上半年选择题-4","sourceFile":"2025上半年选择题.md","sourceQuestionNo":4,"stem":"【考生回忆版】在以阶段划分的编译器中，语义分析阶段的任务包括（　）。\r\n①识别记号 ②识别句子结构 ③检查程序中的语法错误\r\n④填写符号表 ⑤生成中间代码","options":[{"key":"A","text":"②③"},{"key":"B","text":"③④"},{"key":"C","text":"①②"},{"key":"D","text":"④⑤"}],"range":"计算机系统基础","examNo":6},{"id":"2025上半年选择题-5","sourceFile":"2025上半年选择题.md","sourceQuestionNo":5,"stem":"【考生回忆版】浮点数加减运算时，（　）可能导致阶码上溢。","options":[{"key":"A","text":"右规"},{"key":"B","text":"对阶"},{"key":"C","text":"尾数运算"},{"key":"D","text":"左规"}],"range":"计算机系统基础","examNo":7},{"id":"2025上半年选择题-6","sourceFile":"2025上半年选择题.md","sourceQuestionNo":6,"stem":"【考生回忆版】（　）用于在网络中向一组特定的设备发送数据包。","options":[{"key":"A","text":"网络地址"},{"key":"B","text":"广播地址"},{"key":"C","text":"组播地址"},{"key":"D","text":"单播地址"}],"range":"计算机系统基础","examNo":8},{"id":"2025下半年选择题-7","sourceFile":"2025下半年选择题.md","sourceQuestionNo":7,"stem":"【考生回忆版】\r\n黑盒测试的主要依据是（　） 。","options":[{"key":"A","text":"代码复杂度"},{"key":"B","text":"软件需求规格说明书"},{"key":"C","text":"设计文档"},{"key":"D","text":"程序内部逻辑"}],"range":"操作系统与基础支撑","examNo":9},{"id":"2025下半年选择题-8","sourceFile":"2025下半年选择题.md","sourceQuestionNo":8,"stem":"【考生回忆版】\r\n以下序列中，满足大顶堆条件的是（　）。","options":[{"key":"A","text":"50，38，40，28，43，16，25，19"},{"key":"B","text":"50，37，45，25，16，40，35，19"},{"key":"C","text":"45，25，15，16，24，20，7，10"},{"key":"D","text":"55，43，45，48，52，29，75，15"}],"range":"操作系统与基础支撑","examNo":10},{"id":"2025下半年选择题-9","sourceFile":"2025下半年选择题.md","sourceQuestionNo":9,"stem":"【考生回忆版】\r\nVLAN 技术基于MAC地址实现逻辑分组，工作在OSI参考模型的（　）。","options":[{"key":"A","text":"传输层"},{"key":"B","text":"数据链路层"},{"key":"C","text":"网络层"},{"key":"D","text":"物理层"}],"range":"操作系统与基础支撑","examNo":11},{"id":"2025下半年选择题-11","sourceFile":"2025下半年选择题.md","sourceQuestionNo":11,"stem":"【考生回忆版】持续更新中","options":[{"key":"A","text":"持续更新中"},{"key":"B","text":"持续更新中"},{"key":"C","text":"内容耦合"},{"key":"D","text":"持续更新中"}],"range":"操作系统与基础支撑","examNo":12},{"id":"2025下半年选择题-12","sourceFile":"2025下半年选择题.md","sourceQuestionNo":12,"stem":"【考生回忆版】持续更新中","options":[{"key":"A","text":"持续更新中"},{"key":"B","text":"持续更新中"},{"key":"C","text":"持续更新中"},{"key":"D","text":"一个函数不能同时使用位置参数和关键字参数"}],"range":"操作系统与基础支撑","examNo":13},{"id":"2025下半年选择题-13","sourceFile":"2025下半年选择题.md","sourceQuestionNo":13,"stem":"【考生回忆版】持续更新中","options":[{"key":"A","text":"持续更新中"},{"key":"B","text":"投影"},{"key":"C","text":"持续更新中"},{"key":"D","text":"持续更新中"}],"range":"操作系统与基础支撑","examNo":14},{"id":"2025上半年选择题-7","sourceFile":"2025上半年选择题.md","sourceQuestionNo":7,"stem":"【考生回忆版】某软件系统在测试过程中，（　）最适合发现模块之间的接口问题。","options":[{"key":"A","text":"单元测试"},{"key":"B","text":"系统测试"},{"key":"C","text":"验收测试"},{"key":"D","text":"集成测试"}],"range":"操作系统与基础支撑","examNo":15},{"id":"2025上半年选择题-8","sourceFile":"2025上半年选择题.md","sourceQuestionNo":8,"stem":"【考生回忆版】用户A通过SMTP/MINE协议在邮件客户端（如Outlook）中撰写邮件正文，并添加一个Excel附件（财务数据）发送给用户B，该邮件采用的是（　）。","options":[{"key":"A","text":"正文加密，附件明文传输"},{"key":"B","text":"正文、附件均加密传输"},{"key":"C","text":"正文明文，附件加密传输"},{"key":"D","text":"正文、附件明文传输"}],"range":"操作系统与基础支撑","examNo":16},{"id":"2025上半年选择题-11","sourceFile":"2025上半年选择题.md","sourceQuestionNo":11,"stem":"【考生回忆版】设链队列Q用含头结点的循环单链表表示，且仅设尾指针rear，假设队列中有n个元素结点，则入队列和出队列运算的时间复杂度分别为（　）。","options":[{"key":"A","text":"O(1)、O(1)"},{"key":"B","text":"O(1)、O(n)"},{"key":"C","text":"O(n)、O(1)"},{"key":"D","text":"O(n)、O(n)"}],"range":"操作系统与基础支撑","examNo":17},{"id":"2025上半年选择题-12","sourceFile":"2025上半年选择题.md","sourceQuestionNo":12,"stem":"【考生回忆版】编译器将频繁使用的临时变量（如循环计数器）优化到（　）中，可以提升访问速度。","options":[{"key":"A","text":"栈"},{"key":"B","text":"堆"},{"key":"C","text":"静态存储区"},{"key":"D","text":"寄存器"}],"range":"操作系统与基础支撑","examNo":18},{"id":"2025上半年选择题-16","sourceFile":"2025上半年选择题.md","sourceQuestionNo":16,"stem":"【考生回忆版】在分页管理系统中，逻辑地址由页面编号和偏移值构成。如下所示的逻辑地址表示，（　）。  \r\n![q16_st60461022_tigan_1](../../题目素材/2025上半年选择题/DmUXC3UvER.png)","options":[{"key":"A","text":"页面大小为2K，每个页面最大为8M"},{"key":"B","text":"页面大小为4K，每个页面最大为1M"},{"key":"C","text":"页面大小为8K，每个页面最大为2M"},{"key":"D","text":"页面大小为1K，每个页面最大为16M"}],"range":"数据库基础","examNo":19},{"id":"2025上半年选择题-17","sourceFile":"2025上半年选择题.md","sourceQuestionNo":17,"stem":"【考生回忆版】关于开源软件的著作权，以下说法正确的是（　）。","options":[{"key":"A","text":"开源软件不涉及著作权问题"},{"key":"B","text":"开源软件的著作权归使用者所有"},{"key":"C","text":"开源软件的著作权归开发者所有，使用者不能进行任何修改"},{"key":"D","text":"开源软件的著作权归开发者所有，但使用者可以自由使用、修改和分发"}],"range":"数据库基础","examNo":20},{"id":"2024下半年选择题-16","sourceFile":"2024下半年选择题.md","sourceQuestionNo":16,"stem":"对面向对象软件从不同层次进行测试。测试一组协同工作的类之间的相互作用，属于（　）。","options":[{"key":"A","text":"算法"},{"key":"B","text":"系统"},{"key":"C","text":"类"},{"key":"D","text":"模板"}],"range":"数据库基础","examNo":21},{"id":"2024下半年选择题-17","sourceFile":"2024下半年选择题.md","sourceQuestionNo":17,"stem":"在C/C++程序中，函数fun无返回值、无参数，对该函数的正确声明是（　）。","options":[{"key":"A","text":"fun(void);"},{"key":"B","text":"void fun(...)."},{"key":"C","text":"void fun(void, ... )"},{"key":"D","text":"void fun(void);"}],"range":"数据库基础","examNo":22},{"id":"2024下半年选择题-18","sourceFile":"2024下半年选择题.md","sourceQuestionNo":18,"stem":"关系型数据库的参考完整性约束可以通过（　）来实现。","options":[{"key":"A","text":"主码"},{"key":"B","text":"候选码"},{"key":"C","text":"超码"},{"key":"D","text":"外码"}],"range":"数据库基础","examNo":23},{"id":"2024下半年选择题-19","sourceFile":"2024下半年选择题.md","sourceQuestionNo":19,"stem":"采用栈将一个算术表达式的中缀形式转换为后缀形式，设暂存运算符的栈S初始时为空，将算术表达式“196+(48.5-5*7)/9”转换为后级式“196 48 5 7*-9/+”的过程中，栈S中最多有（　）个元素。","options":[{"key":"A","text":"3"},{"key":"B","text":"4"},{"key":"C","text":"2"},{"key":"D","text":"5"}],"range":"数据库基础","examNo":24},{"id":"2024下半年选择题-20","sourceFile":"2024下半年选择题.md","sourceQuestionNo":20,"stem":"页式存储系统的逻辑地址是由页号和页内地址两部分组成。假定页面的大小为4k，地址变换过程如下图所示，图中逻辑地址用十进制表示。图中的逻辑地址经过变换后的十进制物理地址a应为（　）。\r\n![q20_st60428853_tigan_1](../../题目素材/2024下半年选择题/sx9nNC5sge.png)","options":[{"key":"A","text":"14036"},{"key":"B","text":"1748"},{"key":"C","text":"5844"},{"key":"D","text":"9940"}],"range":"数据库基础","examNo":25},{"id":"2024上半年选择题-17","sourceFile":"2024上半年选择题.md","sourceQuestionNo":17,"stem":"【考生回忆版】在29个元素构成的查找表中查找任意一个元素时，可保证最多与表中5个元素进行比较即可确定查找结果，则采用的查找表及查找方法是（　）。","options":[{"key":"A","text":"二叉排序树上的查找"},{"key":"B","text":"顺序表上的顺序查找"},{"key":"C","text":"有序顺序表上的二分查找"},{"key":"D","text":"散列表上的哈希查找"}],"range":"数据库基础","examNo":26},{"id":"2024下半年选择题-22","sourceFile":"2024下半年选择题.md","sourceQuestionNo":22,"stem":"（　）不属于信息安全的基本要素。","options":[{"key":"A","text":"可重用性"},{"key":"B","text":"保密性"},{"key":"C","text":"完整性"},{"key":"D","text":"可控性"}],"range":"网络安全与标准法规","examNo":27},{"id":"2024下半年选择题-24","sourceFile":"2024下半年选择题.md","sourceQuestionNo":24,"stem":"希望用最快的速度挑选出1000个无序元素中前10个最大的元素，则最好选择（　）排序算法。","options":[{"key":"A","text":"冒泡"},{"key":"B","text":"基数"},{"key":"C","text":"堆"},{"key":"D","text":"快速"}],"range":"网络安全与标准法规","examNo":28},{"id":"2024下半年选择题-25","sourceFile":"2024下半年选择题.md","sourceQuestionNo":25,"stem":"（　）操作可以对SQL访问控制进行授权。","options":[{"key":"A","text":"DELETE"},{"key":"B","text":"GRANT"},{"key":"C","text":"REVOKE"},{"key":"D","text":"DROP"}],"range":"网络安全与标准法规","examNo":29},{"id":"2024下半年选择题-28","sourceFile":"2024下半年选择题.md","sourceQuestionNo":28,"stem":"根据权值集合{0.30,0.25,0.25,0.12,0.08}构造的哈夫曼树中，每个权值对应哈夫曼树中的一个叶结点，（　）。","options":[{"key":"A","text":"从根结点到权值0.12和0.08所表示的叶结点路径长度相同"},{"key":"B","text":"从根结点到权值0.30所表示的叶结点路径最长"},{"key":"C","text":"从根结点到所有叶结点的路径长度相同"},{"key":"D","text":"从根结点到权值0.25所表示的两个叶结点路径长度不同"}],"range":"网络安全与标准法规","examNo":30},{"id":"2024下半年选择题-29","sourceFile":"2024下半年选择题.md","sourceQuestionNo":29,"stem":"设有n阶对称矩阵Mt，将其下三角（含主对角线）的元素按行压缩存储在数组Sp[N]中，已知Mt的第一个元案Mt[0][0]存储在Sp[0]，那么Mt[i][j]（0≤i，j \u003c n且i≥j)存储在（　）。","options":[{"key":"A","text":"Sp[j*(j+1)/2+i]"},{"key":"B","text":"Sp[i*(i+1)/2+j]"},{"key":"C","text":"Sp[i*(n-1)+j]"},{"key":"D","text":"Sp[j*(n-1)+i]"}],"range":"网络安全与标准法规","examNo":31},{"id":"2024上半年选择题-21","sourceFile":"2024上半年选择题.md","sourceQuestionNo":21,"stem":"【考生回忆版】以下关于通过解释器运行程序的叙述中，错误的是（　）。","options":[{"key":"A","text":"可以由解释器直接分析并执行高级语言源程序代码"},{"key":"B","text":"与直接运行编译后的机器码相比，通过解释器运行程序的速度更慢"},{"key":"C","text":"解释器运行程序比运行编译和链接方式产生的机器代码效率更高"},{"key":"D","text":"可以先将高级语言程序转换为字节码，再由解释器运行字节码"}],"range":"网络安全与标准法规","examNo":32},{"id":"2024上半年选择题-22","sourceFile":"2024上半年选择题.md","sourceQuestionNo":22,"stem":"【考生回忆版】进行面向对象系统设计时，若存在包A依赖于包B，包B依赖于包C，包C依赖于包A，则此设计违反了（　）原则。","options":[{"key":"A","text":"稳定抽象"},{"key":"B","text":"稳定依赖"},{"key":"C","text":"依赖倒置"},{"key":"D","text":"无环依赖"}],"range":"网络安全与标准法规","examNo":33},{"id":"2024上半年选择题-23","sourceFile":"2024上半年选择题.md","sourceQuestionNo":23,"stem":"【考生回忆版】下列算法属于Hash算法的是（　）。","options":[{"key":"A","text":"SHA"},{"key":"B","text":"DES"},{"key":"C","text":"IDEA"},{"key":"D","text":"RSA"}],"range":"网络安全与标准法规","examNo":34},{"id":"2024上半年选择题-24","sourceFile":"2024上半年选择题.md","sourceQuestionNo":24,"stem":"【考生回忆版】在关系表中选出若干属性列组成新的关系表，可以使用（　）操作实现。","options":[{"key":"A","text":"投影"},{"key":"B","text":"笛卡儿积"},{"key":"C","text":"选择"},{"key":"D","text":"差"}],"range":"网络安全与标准法规","examNo":35},{"id":"2024上半年选择题-27","sourceFile":"2024上半年选择题.md","sourceQuestionNo":27,"stem":"【考生回忆版】在采用定点二进制的运算器中，减法运算一般是通过（　）来实现的。","options":[{"key":"A","text":"补码运算的二进制加法器"},{"key":"B","text":"原码运算的二进制加法器"},{"key":"C","text":"补码运算的二进制减法器"},{"key":"D","text":"原码运算的二进制减法器"}],"range":"网络安全与标准法规","examNo":36},{"id":"2024上半年选择题-28","sourceFile":"2024上半年选择题.md","sourceQuestionNo":28,"stem":"【考生回忆版】用于收回SQL访问控制权限的操作是（　）。","options":[{"key":"A","text":"GRANT"},{"key":"B","text":"DELETE"},{"key":"C","text":"REVOKE"},{"key":"D","text":"DROP"}],"range":"网络安全与标准法规","examNo":37},{"id":"2024上半年选择题-29","sourceFile":"2024上半年选择题.md","sourceQuestionNo":29,"stem":"【考生回忆版】某系统由下图所示的冗余部件构成。若每个部件的千小时可靠度都为R，则该系统的千小时可靠度为（　）。\r\n![q29_st60419833_tigan_1](../../题目素材/2024上半年选择题/esBdpAMyM8.png)","options":[{"key":"A","text":"（1-（1-R）2）（1-R）"},{"key":"B","text":"（1-R）2（1-R2）"},{"key":"C","text":"R（1-R2）R"},{"key":"D","text":"R（1-（1-R）2）R"}],"range":"网络安全与标准法规","examNo":38},{"id":"2023下半年选择题-31","sourceFile":"2023下半年选择题.md","sourceQuestionNo":31,"stem":"【考生回忆版】以下关于软件工程标准化的叙述中，不正确的是（　）。","options":[{"key":"A","text":"可以提高开发人员之间的沟通效率"},{"key":"B","text":"有助于提高管理水平"},{"key":"C","text":"有助于提高软件产品质量"},{"key":"D","text":"可以提高每一位开发人员的开发技能"}],"range":"软件工程与面向对象","examNo":39},{"id":"2023下半年选择题-32","sourceFile":"2023下半年选择题.md","sourceQuestionNo":32,"stem":"【考生回忆版】采用简单选择排序算法对序列（34，12，49，28，31，52，51，49）进行非降序排序，两趟后的序列为（　）。","options":[{"key":"A","text":"（12，28，49，34，31，52，51，49）"},{"key":"B","text":"（12，28，34，49，31，52，51，49）"},{"key":"C","text":"（12，28，31，49，34，52，51，49）"},{"key":"D","text":"（34，12，49，28，31，49，51，52）"}],"range":"软件工程与面向对象","examNo":40},{"id":"2023下半年选择题-33","sourceFile":"2023下半年选择题.md","sourceQuestionNo":33,"stem":"【考生回忆版】程序员甲将其编写完成的软件程序发给同事乙并进行讨论，之后由于甲对该程序极不满意，因此甲决定放弃该程序，后来乙将该程序稍加修改并署自己名在某技术论坛发布。下列说法中，正确的是（　）。","options":[{"key":"A","text":"乙对该程序进行了修改，因此乙享有该程序的软件著作权"},{"key":"B","text":"乙的行为没有侵犯甲的软件著作权，因为甲已放弃程序"},{"key":"C","text":"乙的行为未侵权，因其发布的场合是以交流学习为目的的技术论坛"},{"key":"D","text":"乙的行为侵犯了甲对该程序享有的软件著作权"}],"range":"软件工程与面向对象","examNo":41},{"id":"2023下半年选择题-34","sourceFile":"2023下半年选择题.md","sourceQuestionNo":34,"stem":"【考生回忆版】在设计模块M和模块N时，（　）是最佳的设计。","options":[{"key":"A","text":"M和N通过通信模块传送数据"},{"key":"B","text":"M和N通过公共数据域传送数据"},{"key":"C","text":"M和N通过简单数据参数交换信息"},{"key":"D","text":"M直接访问N的数据"}],"range":"软件工程与面向对象","examNo":42},{"id":"2023下半年选择题-35","sourceFile":"2023下半年选择题.md","sourceQuestionNo":35,"stem":"【考生回忆版】以下关于甘特图的叙述中，不正确的是（　）。","options":[{"key":"A","text":"一种进度管理的工具"},{"key":"B","text":"易于看出每个子任务的持续时间"},{"key":"C","text":"易于看出目前项目的实际进度情况"},{"key":"D","text":"易于看出子任务之间的衔接关系"}],"range":"软件工程与面向对象","examNo":43},{"id":"2023下半年选择题-36","sourceFile":"2023下半年选择题.md","sourceQuestionNo":36,"stem":"【考生回忆版】软件文档在软件生存期中起着重要的作用，其作用不包括（　）。","options":[{"key":"A","text":"提高软件运行效率"},{"key":"B","text":"作为开发过程的阶段工作成果和结束标记"},{"key":"C","text":"提高开发过程的能见度"},{"key":"D","text":"提高开发效率"}],"range":"软件工程与面向对象","examNo":44},{"id":"2023下半年选择题-37","sourceFile":"2023下半年选择题.md","sourceQuestionNo":37,"stem":"【考生回忆版】数据库概念结构设计阶段的工作步骤包括①~④，其正确的顺序为（　）。\r\n①设计局部视图 ②抽象数据 ③修改重构消除冗余 ④合并取消冲突","options":[{"key":"A","text":"①→②→④→③"},{"key":"B","text":"①→②→③→④"},{"key":"C","text":"②→①→③→④"},{"key":"D","text":"②→①→④→③"}],"range":"软件工程与面向对象","examNo":45},{"id":"2023上半年选择题-31","sourceFile":"2023上半年选择题.md","sourceQuestionNo":31,"stem":"在软件系统交付给用户使用后，为了使用户界面更友好，对系统的图形输出进行改进，该行为属于（　）维护。","options":[{"key":"A","text":"改正性"},{"key":"B","text":"适应性"},{"key":"C","text":"改善性"},{"key":"D","text":"预防性"}],"range":"软件工程与面向对象","examNo":46},{"id":"2023上半年选择题-33","sourceFile":"2023上半年选择题.md","sourceQuestionNo":33,"stem":"对采用面向对象方法开发的系统进行测试时，通常从不同层次进行测试。测试类中定义的每个方法属于（　）层。","options":[{"key":"A","text":"算法"},{"key":"B","text":"类"},{"key":"C","text":"模板"},{"key":"D","text":"系统"}],"range":"软件工程与面向对象","examNo":47},{"id":"2023上半年选择题-34","sourceFile":"2023上半年选择题.md","sourceQuestionNo":34,"stem":"在面向对象系统设计中，如果重用了一个包中的某个类，那么就要重用该包中所有类，这属于（　）原则。","options":[{"key":"A","text":"共同封闭"},{"key":"B","text":"共同重用"},{"key":"C","text":"开放封闭"},{"key":"D","text":"接口分离"}],"range":"软件工程与面向对象","examNo":48},{"id":"2023上半年选择题-39","sourceFile":"2023上半年选择题.md","sourceQuestionNo":39,"stem":"Python中采用（　）方法来获得一个对象的类型。","options":[{"key":"A","text":"str ()"},{"key":"B","text":"type ()"},{"key":"C","text":"id ()"},{"key":"D","text":"object ()"}],"range":"软件工程与面向对象","examNo":49},{"id":"2023上半年选择题-40","sourceFile":"2023上半年选择题.md","sourceQuestionNo":40,"stem":"在Python语言中，语句x=（　）不能定义一个元组。","options":[{"key":"A","text":"(1,2,1,2)"},{"key":"B","text":"1,2,1,2"},{"key":"C","text":"tuple ()"},{"key":"D","text":"(1)"}],"range":"软件工程与面向对象","examNo":50},{"id":"2022下半年选择题-31","sourceFile":"2022下半年选择题.md","sourceQuestionNo":31,"stem":"某财务系统的一个组件中，某个变量没有正确初始化，（　）最可能发现该错误。","options":[{"key":"A","text":"单元测试"},{"key":"B","text":"集成测试"},{"key":"C","text":"接受测试"},{"key":"D","text":"安装测试"}],"range":"软件工程与面向对象","examNo":51},{"id":"2022下半年选择题-32","sourceFile":"2022下半年选择题.md","sourceQuestionNo":32,"stem":"软件交付给用户之后进入维护阶段，根据维护具体内容的不同将维护分为不同的类型，其中“采用专用的程序模块对文件或数据中的记录进行增加、修改和删除等操作”的维护属于（　）。","options":[{"key":"A","text":"程序维护"},{"key":"B","text":"数据维护"},{"key":"C","text":"代码维护"},{"key":"D","text":"设备维护"}],"range":"软件工程与面向对象","examNo":52},{"id":"2023上半年选择题-41","sourceFile":"2023上半年选择题.md","sourceQuestionNo":41,"stem":"关于Python语言的叙述中，不正确的是（　）。","options":[{"key":"A","text":"for语句可以用于在序列（如列表、元组和字符串）上进行迭代访问"},{"key":"B","text":"循环结构如for和while后可以加else语句"},{"key":"C","text":"可以用if...else和switch..case语句表示选择结构"},{"key":"D","text":"支持嵌套循环"}],"range":"程序语言与数据结构","examNo":53},{"id":"2023上半年选择题-42","sourceFile":"2023上半年选择题.md","sourceQuestionNo":42,"stem":"在数据库应用系统的开发过程中，开发人员需要通过视图层、逻辑层和物理层三个层次上的抽象来对用户屏蔽系统的复杂性，简化用户与系统的交互过程。错误的是（　）。","options":[{"key":"A","text":"视图层是最高层次的抽象"},{"key":"B","text":"逻辑层是比视图层更低一层的抽象"},{"key":"C","text":"物理层是最低层次的抽象"},{"key":"D","text":"物理层是比逻辑层更高一层的抽象"}],"range":"程序语言与数据结构","examNo":54},{"id":"2023上半年选择题-46","sourceFile":"2023上半年选择题.md","sourceQuestionNo":46,"stem":"利用栈对算术表达式10*（40-30/5）+20求值时，存放操作数的栈（初始为空）的容量至少为（　），才能满足暂存该表达式中的运算数或运算结果的要求。","options":[{"key":"A","text":"2"},{"key":"B","text":"3"},{"key":"C","text":"4"},{"key":"D","text":"5"}],"range":"程序语言与数据结构","examNo":55},{"id":"2023上半年选择题-47","sourceFile":"2023上半年选择题.md","sourceQuestionNo":47,"stem":"设有5个字符，根据其使用频率为其构造哈夫曼编码。以下编码方案中，（　）是不可能的。","options":[{"key":"A","text":"{111,110,101,100,0}"},{"key":"B","text":"{0000,0001,001,01,1}"},{"key":"C","text":"{11,10,01,001,000}"},{"key":"D","text":"{11,10,011,010,000}"}],"range":"程序语言与数据结构","examNo":56},{"id":"2023上半年选择题-48","sourceFile":"2023上半年选择题.md","sourceQuestionNo":48,"stem":"设有向图G具有n个顶点、e条弧，采用邻接表存储，则完成广度优先遍历的时间复杂度为（　）。","options":[{"key":"A","text":"O(n+e)"},{"key":"B","text":"O(n2)"},{"key":"C","text":"O(e2)"},{"key":"D","text":"O(n*e)"}],"range":"程序语言与数据结构","examNo":57},{"id":"2022下半年选择题-41","sourceFile":"2022下半年选择题.md","sourceQuestionNo":41,"stem":"在Python3中，表达式list(range(11))[10:0:-2]的值为（　）。","options":[{"key":"A","text":"[10,8,6,4,2,0]"},{"key":"B","text":"[10,8,6,4,2]"},{"key":"C","text":"[0,2,4,6,8,10]"},{"key":"D","text":"[0,2,4,6,8）"}],"range":"程序语言与数据结构","examNo":58},{"id":"2022下半年选择题-42","sourceFile":"2022下半年选择题.md","sourceQuestionNo":42,"stem":"在Python3中，执行语句x=input()，如果从键盘输入123并按回车键，则x的值为（　）。","options":[{"key":"A","text":"123"},{"key":"B","text":"1,2,3"},{"key":"C","text":"1 2 3"},{"key":"D","text":"'123'"}],"range":"程序语言与数据结构","examNo":59},{"id":"2022下半年选择题-47","sourceFile":"2022下半年选择题.md","sourceQuestionNo":47,"stem":"设栈初始时为空，对于入栈序列1，2，3,...,n,这些元素经过栈之后得到出栈序列p1，p2，p3，... ，pn，若p3=4，则p1，p2不可能的取值为（　）。","options":[{"key":"A","text":"6,5"},{"key":"B","text":"2,3"},{"key":"C","text":"3,1"},{"key":"D","text":"3,5"}],"range":"程序语言与数据结构","examNo":60},{"id":"2022下半年选择题-48","sourceFile":"2022下半年选择题.md","sourceQuestionNo":48,"stem":"设m和n是某二叉树上的两个节点，中序遍历时，n排在m之前的条件是（　）。","options":[{"key":"A","text":"m是n的祖先节点"},{"key":"B","text":"m是n的子孙节点"},{"key":"C","text":"m在n的左边"},{"key":"D","text":"m在n的右边"}],"range":"程序语言与数据结构","examNo":61},{"id":"2022下半年选择题-49","sourceFile":"2022下半年选择题.md","sourceQuestionNo":49,"stem":"若无向图G有n个顶点e条边，则G采用邻接矩阵存储时，矩阵的大小为（　）。","options":[{"key":"A","text":"n*e"},{"key":"B","text":"n2"},{"key":"C","text":"n2+e2"},{"key":"D","text":"（n+e)2"}],"range":"程序语言与数据结构","examNo":62},{"id":"2022下半年选择题-50","sourceFile":"2022下半年选择题.md","sourceQuestionNo":50,"stem":"以下关于m阶B-树的说法中，错误的是（　）。","options":[{"key":"A","text":"根节点最多有m棵子树"},{"key":"B","text":"所有叶子节点都在同一层次上"},{"key":"C","text":"节点中的关键字有序排列"},{"key":"D","text":"叶子节点通过指针链接为有序表"}],"range":"程序语言与数据结构","examNo":63},{"id":"2022上半年选择题-42","sourceFile":"2022上半年选择题.md","sourceQuestionNo":42,"stem":"在风险管理中，降低风险危害的策略不包括（　）。","options":[{"key":"A","text":"回避风险"},{"key":"B","text":"转移风险"},{"key":"C","text":"消除风险"},{"key":"D","text":"接受风险并控制损失"}],"range":"程序语言与数据结构","examNo":64},{"id":"2022下半年选择题-51","sourceFile":"2022下半年选择题.md","sourceQuestionNo":51,"stem":"下列排序算法中，占用辅助存储空间最多的是（　）。","options":[{"key":"A","text":"归并排序"},{"key":"B","text":"快速排序"},{"key":"C","text":"堆排序"},{"key":"D","text":"冒泡排序"}],"range":"算法分析与综合应用","examNo":65},{"id":"2022下半年选择题-55","sourceFile":"2022下半年选择题.md","sourceQuestionNo":55,"stem":"Telnet协议是一种（　）的远程登录协议。","options":[{"key":"A","text":"安全"},{"key":"B","text":"B/S模式"},{"key":"C","text":"基于TCP"},{"key":"D","text":"分布式"}],"range":"算法分析与综合应用","examNo":66},{"id":"2021下半年选择题-52","sourceFile":"2021下半年选择题.md","sourceQuestionNo":52,"stem":"用户在电子商务网站上使用网上银行支付时，必须通过（　）在Internet与银行专用网之间进行数据交换。","options":[{"key":"A","text":"支付网关"},{"key":"B","text":"防病毒网关"},{"key":"C","text":"出口路由器"},{"key":"D","text":"堡垒主机"}],"range":"算法分析与综合应用","examNo":67},{"id":"2021下半年选择题-54","sourceFile":"2021下半年选择题.md","sourceQuestionNo":54,"stem":"页面的标记对中（　）用于表示网页代码的起始和终止。","options":[{"key":"A","text":"\u003c html > \u003c /html >"},{"key":"B","text":"\u003c head > \u003c /head >"},{"key":"C","text":"\u003c body > \u003c /body >"},{"key":"D","text":"\u003c meta > \u003c /meta >"}],"range":"算法分析与综合应用","examNo":68},{"id":"2021上半年选择题-53","sourceFile":"2021上半年选择题.md","sourceQuestionNo":53,"stem":"在地址栏输入www.abc.com，浏览器默认的应用层协议是（　）。","options":[{"key":"A","text":"HTTP"},{"key":"B","text":"DNS"},{"key":"C","text":"TCP"},{"key":"D","text":"FTP"}],"range":"算法分析与综合应用","examNo":69},{"id":"2021上半年选择题-56","sourceFile":"2021上半年选择题.md","sourceQuestionNo":56,"stem":"在网络系统设计时，不可能使所有设计目标都能达到最优，下列措施中较为合理的是（　）。","options":[{"key":"A","text":"尽量让最低建设成本目标达到最优"},{"key":"B","text":"尽量让最短的故障时间目标达到最优"},{"key":"C","text":"尽量让最大的安全性目标达到最优"},{"key":"D","text":"尽量让优先级较高的目标达到最优"}],"range":"算法分析与综合应用","examNo":70},{"id":"2020下半年选择题-51","sourceFile":"2020下半年选择题.md","sourceQuestionNo":51,"stem":"某简单无向连通图G的顶点数为n，则图G最少和最多分别有（　）条边。","options":[{"key":"A","text":"n,n2/2"},{"key":"B","text":"n-1,n*(n-1)/2"},{"key":"C","text":"n,n*(n-1)/2"},{"key":"D","text":"n-1,n2/2"}],"range":"算法分析与综合应用","examNo":71},{"id":"2020下半年选择题-52","sourceFile":"2020下半年选择题.md","sourceQuestionNo":52,"stem":"根据渐进分析，表达式序列：n4, lgn, 2n, 1000n, n2/3, n!从低到高排序为（　）。","options":[{"key":"A","text":"lgn,1000n,n2/3,n4,n!,2n"},{"key":"B","text":"n2/3,1000n,lgn,n4,n!,2n"},{"key":"C","text":"lgn,1000n,n2/3,2n,n4,n!"},{"key":"D","text":"lgn,n2/3,1000n,n4,2n,n!"}],"range":"算法分析与综合应用","examNo":72},{"id":"2020下半年选择题-53","sourceFile":"2020下半年选择题.md","sourceQuestionNo":53,"stem":"采用DHCP动态分配IP地址，如果某主机开机后没有得到DHCP服务器的响应。则该主机获取的IP地址属于网络（　）。","options":[{"key":"A","text":"202.117.0.0/24"},{"key":"B","text":"192.168.1.0/24"},{"key":"C","text":"172.16.0.0/16"},{"key":"D","text":"169.254.0.0/16"}],"range":"算法分析与综合应用","examNo":73},{"id":"2020下半年选择题-54","sourceFile":"2020下半年选择题.md","sourceQuestionNo":54,"stem":"在浏览器的地址栏中输入xxxyftp.abc.can.cn，在该URL中（　）是要访问的主机名。","options":[{"key":"A","text":"xxxyftp"},{"key":"B","text":"abc"},{"key":"C","text":"can"},{"key":"D","text":"cn"}],"range":"算法分析与综合应用","examNo":74},{"id":"2020下半年选择题-56","sourceFile":"2020下半年选择题.md","sourceQuestionNo":56,"stem":"因特网中的域名系统（Domain Name System）是一个分层的域名，在根域下面是顶级域，以下顶级域中，（　）属于国家顶级域。","options":[{"key":"A","text":"NET"},{"key":"B","text":"EDU"},{"key":"C","text":"COM"},{"key":"D","text":"UK"}],"range":"算法分析与综合应用","examNo":75}];
+
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+function inlineMarkdown(value) {
+  return escapeHtml(value)
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img class="question-image" alt="$1" src="$2">')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n/g, '<br>');
+}
+function renderMarkdown(md) {
+  const blocks = [];
+  let text = String(md ?? '').replace(/\r\n/g, '\n');
+  text = text.replace(/\`\`\`([\s\S]*?)\`\`\`/g, (_, code) => {
+    const token = '%%CODE' + blocks.length + '%%';
+    blocks.push('<pre><code>' + escapeHtml(code.trim()) + '</code></pre>');
+    return token;
+  });
+  let html = text.split(/\n{2,}/).map(part => {
+    if (/^%%CODE\d+%%$/.test(part.trim())) return part.trim();
+    if (/^#{1,4}\s+/m.test(part.trim())) {
+      return '<p>' + inlineMarkdown(part.replace(/^#{1,4}\s+/gm, '')) + '</p>';
+    }
+    return '<p>' + inlineMarkdown(part.trim()) + '</p>';
+  }).join('');
+  blocks.forEach((block, index) => { html = html.replace('%%CODE' + index + '%%', block); });
+  return html;
+}
+function stamp() {
+  const d = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  return d.getFullYear() + pad(d.getMonth()+1) + pad(d.getDate()) + '_' + pad(d.getHours()) + pad(d.getMinutes()) + pad(d.getSeconds());
+}
+function downloadJson(filename, payload) {
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+function resetMockExam(targetUrl) {
+  const ok = confirm('重新开始会清空本轮计时、已选答案和交卷记录，确定继续吗？');
+  if (!ok) return;
+  [
+    'sdes_mock_exam_session_start_v1',
+    'sdes_mock_choice_start_v1',
+    'sdes_mock_case_start_v1',
+    'sdes_mock_choice_answers_v1',
+    'sdes_mock_case_answers_v1',
+    'sdes_mock_choice_submission_v1',
+    'sdes_mock_case_submission_v1'
+  ].forEach(key => localStorage.removeItem(key));
+  window.location.href = targetUrl || window.location.pathname;
+}
+function ensureSessionStart() {
+  const key = 'sdes_mock_exam_session_start_v1';
+  let start = Number(localStorage.getItem(key));
+  if (!start) {
+    start = Date.now();
+    localStorage.setItem(key, String(start));
+  }
+  return start;
+}
+function formatTime(ms) {
+  const total = Math.max(0, Math.ceil(ms / 1000));
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+  return String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+}
+
+const ANSWER_KEY = 'sdes_mock_choice_answers_v1';
+const SUBMIT_KEY = 'sdes_mock_choice_submission_v1';
+const start = ensureSessionStart();
+const choiceStartKey = 'sdes_mock_choice_start_v1';
+if (!localStorage.getItem(choiceStartKey)) localStorage.setItem(choiceStartKey, String(Date.now()));
+const choiceStart = Number(localStorage.getItem(choiceStartKey));
+const answers = JSON.parse(localStorage.getItem(ANSWER_KEY) || '{}');
+let current = 0;
+let submitted = false;
+function saveAnswers() { localStorage.setItem(ANSWER_KEY, JSON.stringify(answers)); }
+function progress() {
+  const done = QUESTIONS.filter(q => answers[q.examNo]).length;
+  return Math.round(done * 100 / QUESTIONS.length);
+}
+function renderNumbers() {
+  const box = document.getElementById('numbers');
+  box.innerHTML = QUESTIONS.map(q => '<button class="num ' + (q.examNo-1===current?'active ':'') + (answers[q.examNo]?'done':'') + '" data-i="' + (q.examNo-1) + '">' + String(q.examNo).padStart(2,'0') + '</button>').join('');
+  box.querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => { current = Number(btn.dataset.i); render(); }));
+  document.getElementById('progressBox').textContent = progress() + '%';
+}
+function render() {
+  const q = QUESTIONS[current];
+  renderNumbers();
+  document.getElementById('currentLabel').textContent = '第' + q.examNo + '题';
+  document.getElementById('stem').innerHTML = renderMarkdown(q.stem);
+  document.getElementById('source').textContent = '题源：' + q.sourceFile + ' 第' + q.sourceQuestionNo + '题；分布：' + q.range;
+  document.getElementById('options').innerHTML = q.options.map(opt => {
+    const checked = answers[q.examNo] === opt.key;
+    return '<label class="option ' + (checked ? 'selected' : '') + '"><span>' + q.examNo + '</span><input type="radio" name="opt" value="' + opt.key + '"' + (checked ? ' checked' : '') + '><span><span class="letter">' + opt.key + '.</span> ' + inlineMarkdown(opt.text) + '</span></label>';
+  }).join('');
+  document.querySelectorAll('input[name=opt]').forEach(input => {
+    input.addEventListener('change', () => {
+      answers[q.examNo] = input.value;
+      saveAnswers();
+      render();
+    });
+  });
+}
+document.getElementById('prevBtn').addEventListener('click', () => { current = Math.max(0, current - 1); render(); });
+document.getElementById('nextBtn').addEventListener('click', () => { current = Math.min(QUESTIONS.length - 1, current + 1); render(); });
+function submit(forced=false) {
+  if (submitted) return;
+  submitted = true;
+  const payload = {
+    paper: '软件设计师综合知识选择题HTML模拟第1轮',
+    submittedAt: new Date().toISOString(),
+    forced,
+    sources: QUESTIONS.map(q => ({ examNo:q.examNo, sourceFile:q.sourceFile, sourceQuestionNo:q.sourceQuestionNo, range:q.range })),
+    answers
+  };
+  localStorage.setItem(SUBMIT_KEY, JSON.stringify(payload));
+  downloadJson('选择题答题答案_' + stamp() + '.json', payload);
+  setTimeout(() => { window.location.href = '案例题答题.html'; }, 1500);
+}
+document.getElementById('submitBtn').addEventListener('click', () => submit(false));
+document.getElementById('restartBtn').addEventListener('click', () => resetMockExam('选择题答题.html'));
+function tick() {
+  const elapsed = Date.now() - choiceStart;
+  const remain = 2 * 60 * 60 * 1000 - elapsed;
+  document.getElementById('timer').textContent = formatTime(remain);
+  const canSubmit = remain <= 30 * 60 * 1000;
+  document.getElementById('submitBtn').disabled = !canSubmit;
+  document.getElementById('submitBtn').textContent = canSubmit ? '交卷' : '剩余30分钟后可交卷';
+  if (remain <= 0) submit(true);
+}
+render();
+tick();
+setInterval(tick, 1000);
+</script>
+</body>
+</html>

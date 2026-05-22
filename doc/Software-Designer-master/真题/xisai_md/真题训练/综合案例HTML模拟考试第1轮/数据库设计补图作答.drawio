@@ -1,0 +1,28 @@
+<mxfile host="app.diagrams.net" modified="2026-05-22T00:00:00.000Z" agent="Codex" version="24.7.17">
+  <diagram name="数据库设计补图作答" id="database-draw-answer">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="2016上半年案例题 第2题 数据库设计补图作答区" style="text;html=1;strokeColor=none;fillColor=none;fontSize=18;fontStyle=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="40" y="30" width="760" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="note" value="请参照 HTML 题干中的原始 E-R 图，在下方作答区补充问题1和问题3要求的联系、对象及联系类型。完成后导出 PNG/JPG，并上传或粘贴到案例题 HTML 对应小问。" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fffbe6;strokeColor=#d6b656;fontSize=14;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="75" width="980" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="p1" value="问题1作答区：补充“配送”联系所关联对象及联系类型" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=15;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="180" width="480" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="p1canvas" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="250" width="480" height="360" as="geometry" />
+        </mxCell>
+        <mxCell id="p3" value="问题3作答区：增加送货上门服务后的图形补充" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=15;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="180" width="520" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="p3canvas" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="250" width="520" height="360" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

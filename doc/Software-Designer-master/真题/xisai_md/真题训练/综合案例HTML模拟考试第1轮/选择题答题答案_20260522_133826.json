@@ -1,0 +1,530 @@
+{
+  "paper": "软件设计师综合知识选择题HTML模拟第1轮",
+  "submittedAt": "2026-05-22T05:38:26.937Z",
+  "forced": true,
+  "sources": [
+    {
+      "examNo": 1,
+      "sourceFile": "2025下半年选择题.md",
+      "sourceQuestionNo": 2,
+      "range": "计算机系统基础"
+    },
+    {
+      "examNo": 2,
+      "sourceFile": "2025下半年选择题.md",
+      "sourceQuestionNo": 3,
+      "range": "计算机系统基础"
+    },
+    {
+      "examNo": 3,
+      "sourceFile": "2025下半年选择题.md",
+      "sourceQuestionNo": 4,
+      "range": "计算机系统基础"
+    },
+    {
+      "examNo": 4,
+      "sourceFile": "2025下半年选择题.md",
+      "sourceQuestionNo": 5,
+      "range": "计算机系统基础"
+    },
+    {
+      "examNo": 5,
+      "sourceFile": "2025上半年选择题.md",
+      "sourceQuestionNo": 1,
+      "range": "计算机系统基础"
+    },
+    {
+      "examNo": 6,
+      "sourceFile": "2025上半年选择题.md",
+      "sourceQuestionNo": 4,
+      "range": "计算机系统基础"
+    },
+    {
+      "examNo": 7,
+      "sourceFile": "2025上半年选择题.md",
+      "sourceQuestionNo": 5,
+      "range": "计算机系统基础"
+    },
+    {
+      "examNo": 8,
+      "sourceFile": "2025上半年选择题.md",
+      "sourceQuestionNo": 6,
+      "range": "计算机系统基础"
+    },
+    {
+      "examNo": 9,
+      "sourceFile": "2025下半年选择题.md",
+      "sourceQuestionNo": 7,
+      "range": "操作系统与基础支撑"
+    },
+    {
+      "examNo": 10,
+      "sourceFile": "2025下半年选择题.md",
+      "sourceQuestionNo": 8,
+      "range": "操作系统与基础支撑"
+    },
+    {
+      "examNo": 11,
+      "sourceFile": "2025下半年选择题.md",
+      "sourceQuestionNo": 9,
+      "range": "操作系统与基础支撑"
+    },
+    {
+      "examNo": 12,
+      "sourceFile": "2025下半年选择题.md",
+      "sourceQuestionNo": 11,
+      "range": "操作系统与基础支撑"
+    },
+    {
+      "examNo": 13,
+      "sourceFile": "2025下半年选择题.md",
+      "sourceQuestionNo": 12,
+      "range": "操作系统与基础支撑"
+    },
+    {
+      "examNo": 14,
+      "sourceFile": "2025下半年选择题.md",
+      "sourceQuestionNo": 13,
+      "range": "操作系统与基础支撑"
+    },
+    {
+      "examNo": 15,
+      "sourceFile": "2025上半年选择题.md",
+      "sourceQuestionNo": 7,
+      "range": "操作系统与基础支撑"
+    },
+    {
+      "examNo": 16,
+      "sourceFile": "2025上半年选择题.md",
+      "sourceQuestionNo": 8,
+      "range": "操作系统与基础支撑"
+    },
+    {
+      "examNo": 17,
+      "sourceFile": "2025上半年选择题.md",
+      "sourceQuestionNo": 11,
+      "range": "操作系统与基础支撑"
+    },
+    {
+      "examNo": 18,
+      "sourceFile": "2025上半年选择题.md",
+      "sourceQuestionNo": 12,
+      "range": "操作系统与基础支撑"
+    },
+    {
+      "examNo": 19,
+      "sourceFile": "2025上半年选择题.md",
+      "sourceQuestionNo": 16,
+      "range": "数据库基础"
+    },
+    {
+      "examNo": 20,
+      "sourceFile": "2025上半年选择题.md",
+      "sourceQuestionNo": 17,
+      "range": "数据库基础"
+    },
+    {
+      "examNo": 21,
+      "sourceFile": "2024下半年选择题.md",
+      "sourceQuestionNo": 16,
+      "range": "数据库基础"
+    },
+    {
+      "examNo": 22,
+      "sourceFile": "2024下半年选择题.md",
+      "sourceQuestionNo": 17,
+      "range": "数据库基础"
+    },
+    {
+      "examNo": 23,
+      "sourceFile": "2024下半年选择题.md",
+      "sourceQuestionNo": 18,
+      "range": "数据库基础"
+    },
+    {
+      "examNo": 24,
+      "sourceFile": "2024下半年选择题.md",
+      "sourceQuestionNo": 19,
+      "range": "数据库基础"
+    },
+    {
+      "examNo": 25,
+      "sourceFile": "2024下半年选择题.md",
+      "sourceQuestionNo": 20,
+      "range": "数据库基础"
+    },
+    {
+      "examNo": 26,
+      "sourceFile": "2024上半年选择题.md",
+      "sourceQuestionNo": 17,
+      "range": "数据库基础"
+    },
+    {
+      "examNo": 27,
+      "sourceFile": "2024下半年选择题.md",
+      "sourceQuestionNo": 22,
+      "range": "网络安全与标准法规"
+    },
+    {
+      "examNo": 28,
+      "sourceFile": "2024下半年选择题.md",
+      "sourceQuestionNo": 24,
+      "range": "网络安全与标准法规"
+    },
+    {
+      "examNo": 29,
+      "sourceFile": "2024下半年选择题.md",
+      "sourceQuestionNo": 25,
+      "range": "网络安全与标准法规"
+    },
+    {
+      "examNo": 30,
+      "sourceFile": "2024下半年选择题.md",
+      "sourceQuestionNo": 28,
+      "range": "网络安全与标准法规"
+    },
+    {
+      "examNo": 31,
+      "sourceFile": "2024下半年选择题.md",
+      "sourceQuestionNo": 29,
+      "range": "网络安全与标准法规"
+    },
+    {
+      "examNo": 32,
+      "sourceFile": "2024上半年选择题.md",
+      "sourceQuestionNo": 21,
+      "range": "网络安全与标准法规"
+    },
+    {
+      "examNo": 33,
+      "sourceFile": "2024上半年选择题.md",
+      "sourceQuestionNo": 22,
+      "range": "网络安全与标准法规"
+    },
+    {
+      "examNo": 34,
+      "sourceFile": "2024上半年选择题.md",
+      "sourceQuestionNo": 23,
+      "range": "网络安全与标准法规"
+    },
+    {
+      "examNo": 35,
+      "sourceFile": "2024上半年选择题.md",
+      "sourceQuestionNo": 24,
+      "range": "网络安全与标准法规"
+    },
+    {
+      "examNo": 36,
+      "sourceFile": "2024上半年选择题.md",
+      "sourceQuestionNo": 27,
+      "range": "网络安全与标准法规"
+    },
+    {
+      "examNo": 37,
+      "sourceFile": "2024上半年选择题.md",
+      "sourceQuestionNo": 28,
+      "range": "网络安全与标准法规"
+    },
+    {
+      "examNo": 38,
+      "sourceFile": "2024上半年选择题.md",
+      "sourceQuestionNo": 29,
+      "range": "网络安全与标准法规"
+    },
+    {
+      "examNo": 39,
+      "sourceFile": "2023下半年选择题.md",
+      "sourceQuestionNo": 31,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 40,
+      "sourceFile": "2023下半年选择题.md",
+      "sourceQuestionNo": 32,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 41,
+      "sourceFile": "2023下半年选择题.md",
+      "sourceQuestionNo": 33,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 42,
+      "sourceFile": "2023下半年选择题.md",
+      "sourceQuestionNo": 34,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 43,
+      "sourceFile": "2023下半年选择题.md",
+      "sourceQuestionNo": 35,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 44,
+      "sourceFile": "2023下半年选择题.md",
+      "sourceQuestionNo": 36,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 45,
+      "sourceFile": "2023下半年选择题.md",
+      "sourceQuestionNo": 37,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 46,
+      "sourceFile": "2023上半年选择题.md",
+      "sourceQuestionNo": 31,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 47,
+      "sourceFile": "2023上半年选择题.md",
+      "sourceQuestionNo": 33,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 48,
+      "sourceFile": "2023上半年选择题.md",
+      "sourceQuestionNo": 34,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 49,
+      "sourceFile": "2023上半年选择题.md",
+      "sourceQuestionNo": 39,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 50,
+      "sourceFile": "2023上半年选择题.md",
+      "sourceQuestionNo": 40,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 51,
+      "sourceFile": "2022下半年选择题.md",
+      "sourceQuestionNo": 31,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 52,
+      "sourceFile": "2022下半年选择题.md",
+      "sourceQuestionNo": 32,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 53,
+      "sourceFile": "2023上半年选择题.md",
+      "sourceQuestionNo": 41,
+      "range": "程序语言与数据结构"
+    },
+    {
+      "examNo": 54,
+      "sourceFile": "2023上半年选择题.md",
+      "sourceQuestionNo": 42,
+      "range": "程序语言与数据结构"
+    },
+    {
+      "examNo": 55,
+      "sourceFile": "2023上半年选择题.md",
+      "sourceQuestionNo": 46,
+      "range": "程序语言与数据结构"
+    },
+    {
+      "examNo": 56,
+      "sourceFile": "2023上半年选择题.md",
+      "sourceQuestionNo": 47,
+      "range": "程序语言与数据结构"
+    },
+    {
+      "examNo": 57,
+      "sourceFile": "2023上半年选择题.md",
+      "sourceQuestionNo": 48,
+      "range": "程序语言与数据结构"
+    },
+    {
+      "examNo": 58,
+      "sourceFile": "2022下半年选择题.md",
+      "sourceQuestionNo": 41,
+      "range": "程序语言与数据结构"
+    },
+    {
+      "examNo": 59,
+      "sourceFile": "2022下半年选择题.md",
+      "sourceQuestionNo": 42,
+      "range": "程序语言与数据结构"
+    },
+    {
+      "examNo": 60,
+      "sourceFile": "2022下半年选择题.md",
+      "sourceQuestionNo": 47,
+      "range": "程序语言与数据结构"
+    },
+    {
+      "examNo": 61,
+      "sourceFile": "2022下半年选择题.md",
+      "sourceQuestionNo": 48,
+      "range": "程序语言与数据结构"
+    },
+    {
+      "examNo": 62,
+      "sourceFile": "2022下半年选择题.md",
+      "sourceQuestionNo": 49,
+      "range": "程序语言与数据结构"
+    },
+    {
+      "examNo": 63,
+      "sourceFile": "2022下半年选择题.md",
+      "sourceQuestionNo": 50,
+      "range": "程序语言与数据结构"
+    },
+    {
+      "examNo": 64,
+      "sourceFile": "2022上半年选择题.md",
+      "sourceQuestionNo": 42,
+      "range": "程序语言与数据结构"
+    },
+    {
+      "examNo": 65,
+      "sourceFile": "2022下半年选择题.md",
+      "sourceQuestionNo": 51,
+      "range": "算法分析与综合应用"
+    },
+    {
+      "examNo": 66,
+      "sourceFile": "2022下半年选择题.md",
+      "sourceQuestionNo": 55,
+      "range": "算法分析与综合应用"
+    },
+    {
+      "examNo": 67,
+      "sourceFile": "2021下半年选择题.md",
+      "sourceQuestionNo": 52,
+      "range": "算法分析与综合应用"
+    },
+    {
+      "examNo": 68,
+      "sourceFile": "2021下半年选择题.md",
+      "sourceQuestionNo": 54,
+      "range": "算法分析与综合应用"
+    },
+    {
+      "examNo": 69,
+      "sourceFile": "2021上半年选择题.md",
+      "sourceQuestionNo": 53,
+      "range": "算法分析与综合应用"
+    },
+    {
+      "examNo": 70,
+      "sourceFile": "2021上半年选择题.md",
+      "sourceQuestionNo": 56,
+      "range": "算法分析与综合应用"
+    },
+    {
+      "examNo": 71,
+      "sourceFile": "2020下半年选择题.md",
+      "sourceQuestionNo": 51,
+      "range": "算法分析与综合应用"
+    },
+    {
+      "examNo": 72,
+      "sourceFile": "2020下半年选择题.md",
+      "sourceQuestionNo": 52,
+      "range": "算法分析与综合应用"
+    },
+    {
+      "examNo": 73,
+      "sourceFile": "2020下半年选择题.md",
+      "sourceQuestionNo": 53,
+      "range": "算法分析与综合应用"
+    },
+    {
+      "examNo": 74,
+      "sourceFile": "2020下半年选择题.md",
+      "sourceQuestionNo": 54,
+      "range": "算法分析与综合应用"
+    },
+    {
+      "examNo": 75,
+      "sourceFile": "2020下半年选择题.md",
+      "sourceQuestionNo": 56,
+      "range": "算法分析与综合应用"
+    }
+  ],
+  "answers": {
+    "1": "B",
+    "2": "D",
+    "3": "A",
+    "4": "D",
+    "5": "A",
+    "6": "B",
+    "7": "C",
+    "8": "C",
+    "9": "B",
+    "10": "B",
+    "11": "B",
+    "15": "D",
+    "16": "D",
+    "17": "A",
+    "18": "D",
+    "19": "B",
+    "20": "D",
+    "21": "C",
+    "22": "B",
+    "23": "B",
+    "24": "B",
+    "25": "D",
+    "26": "C",
+    "27": "D",
+    "28": "B",
+    "29": "B",
+    "30": "A",
+    "31": "B",
+    "32": "C",
+    "33": "D",
+    "34": "A",
+    "35": "A",
+    "36": "A",
+    "37": "C",
+    "38": "D",
+    "39": "D",
+    "40": "A",
+    "41": "D",
+    "42": "C",
+    "43": "D",
+    "44": "A",
+    "45": "D",
+    "46": "C",
+    "47": "A",
+    "48": "B",
+    "49": "B",
+    "50": "D",
+    "51": "A",
+    "52": "B",
+    "53": "C",
+    "54": "D",
+    "55": "C",
+    "57": "A",
+    "58": "A",
+    "59": "D",
+    "60": "C",
+    "61": "D",
+    "62": "B",
+    "63": "D",
+    "64": "C",
+    "65": "A",
+    "66": "C",
+    "67": "C",
+    "68": "A",
+    "69": "A",
+    "70": "D",
+    "71": "B",
+    "72": "D",
+    "73": "B",
+    "74": "B",
+    "75": "D"
+  }
+}

@@ -1,0 +1,504 @@
+{
+  "owner": "Codex",
+  "task": "software-designer-html-mock-exam",
+  "status": "generated",
+  "updated": "2026-05-22",
+  "rule": "Only sourced from doc/Software-Designer-master/真题/xisai_md/题目; sources found in 真题训练 are excluded.",
+  "excluded": {
+    "choiceSourceCount": 174,
+    "caseSourceCount": 45
+  },
+  "choiceDistribution": {
+    "计算机系统基础": 8,
+    "操作系统与基础支撑": 10,
+    "数据库基础": 8,
+    "网络安全与标准法规": 12,
+    "软件工程与面向对象": 14,
+    "程序语言与数据结构": 12,
+    "算法分析与综合应用": 11
+  },
+  "choiceSources": [
+    {
+      "examNo": 1,
+      "sourceFile": "2025下半年选择题.md",
+      "sourceQuestionNo": 2,
+      "range": "计算机系统基础"
+    },
+    {
+      "examNo": 2,
+      "sourceFile": "2025下半年选择题.md",
+      "sourceQuestionNo": 3,
+      "range": "计算机系统基础"
+    },
+    {
+      "examNo": 3,
+      "sourceFile": "2025下半年选择题.md",
+      "sourceQuestionNo": 4,
+      "range": "计算机系统基础"
+    },
+    {
+      "examNo": 4,
+      "sourceFile": "2025下半年选择题.md",
+      "sourceQuestionNo": 5,
+      "range": "计算机系统基础"
+    },
+    {
+      "examNo": 5,
+      "sourceFile": "2025上半年选择题.md",
+      "sourceQuestionNo": 1,
+      "range": "计算机系统基础"
+    },
+    {
+      "examNo": 6,
+      "sourceFile": "2025上半年选择题.md",
+      "sourceQuestionNo": 4,
+      "range": "计算机系统基础"
+    },
+    {
+      "examNo": 7,
+      "sourceFile": "2025上半年选择题.md",
+      "sourceQuestionNo": 5,
+      "range": "计算机系统基础"
+    },
+    {
+      "examNo": 8,
+      "sourceFile": "2025上半年选择题.md",
+      "sourceQuestionNo": 6,
+      "range": "计算机系统基础"
+    },
+    {
+      "examNo": 9,
+      "sourceFile": "2025下半年选择题.md",
+      "sourceQuestionNo": 7,
+      "range": "操作系统与基础支撑"
+    },
+    {
+      "examNo": 10,
+      "sourceFile": "2025下半年选择题.md",
+      "sourceQuestionNo": 8,
+      "range": "操作系统与基础支撑"
+    },
+    {
+      "examNo": 11,
+      "sourceFile": "2025下半年选择题.md",
+      "sourceQuestionNo": 9,
+      "range": "操作系统与基础支撑"
+    },
+    {
+      "examNo": 12,
+      "sourceFile": "2025下半年选择题.md",
+      "sourceQuestionNo": 11,
+      "range": "操作系统与基础支撑"
+    },
+    {
+      "examNo": 13,
+      "sourceFile": "2025下半年选择题.md",
+      "sourceQuestionNo": 12,
+      "range": "操作系统与基础支撑"
+    },
+    {
+      "examNo": 14,
+      "sourceFile": "2025下半年选择题.md",
+      "sourceQuestionNo": 13,
+      "range": "操作系统与基础支撑"
+    },
+    {
+      "examNo": 15,
+      "sourceFile": "2025上半年选择题.md",
+      "sourceQuestionNo": 7,
+      "range": "操作系统与基础支撑"
+    },
+    {
+      "examNo": 16,
+      "sourceFile": "2025上半年选择题.md",
+      "sourceQuestionNo": 8,
+      "range": "操作系统与基础支撑"
+    },
+    {
+      "examNo": 17,
+      "sourceFile": "2025上半年选择题.md",
+      "sourceQuestionNo": 11,
+      "range": "操作系统与基础支撑"
+    },
+    {
+      "examNo": 18,
+      "sourceFile": "2025上半年选择题.md",
+      "sourceQuestionNo": 12,
+      "range": "操作系统与基础支撑"
+    },
+    {
+      "examNo": 19,
+      "sourceFile": "2025上半年选择题.md",
+      "sourceQuestionNo": 16,
+      "range": "数据库基础"
+    },
+    {
+      "examNo": 20,
+      "sourceFile": "2025上半年选择题.md",
+      "sourceQuestionNo": 17,
+      "range": "数据库基础"
+    },
+    {
+      "examNo": 21,
+      "sourceFile": "2024下半年选择题.md",
+      "sourceQuestionNo": 16,
+      "range": "数据库基础"
+    },
+    {
+      "examNo": 22,
+      "sourceFile": "2024下半年选择题.md",
+      "sourceQuestionNo": 17,
+      "range": "数据库基础"
+    },
+    {
+      "examNo": 23,
+      "sourceFile": "2024下半年选择题.md",
+      "sourceQuestionNo": 18,
+      "range": "数据库基础"
+    },
+    {
+      "examNo": 24,
+      "sourceFile": "2024下半年选择题.md",
+      "sourceQuestionNo": 19,
+      "range": "数据库基础"
+    },
+    {
+      "examNo": 25,
+      "sourceFile": "2024下半年选择题.md",
+      "sourceQuestionNo": 20,
+      "range": "数据库基础"
+    },
+    {
+      "examNo": 26,
+      "sourceFile": "2024上半年选择题.md",
+      "sourceQuestionNo": 17,
+      "range": "数据库基础"
+    },
+    {
+      "examNo": 27,
+      "sourceFile": "2024下半年选择题.md",
+      "sourceQuestionNo": 22,
+      "range": "网络安全与标准法规"
+    },
+    {
+      "examNo": 28,
+      "sourceFile": "2024下半年选择题.md",
+      "sourceQuestionNo": 24,
+      "range": "网络安全与标准法规"
+    },
+    {
+      "examNo": 29,
+      "sourceFile": "2024下半年选择题.md",
+      "sourceQuestionNo": 25,
+      "range": "网络安全与标准法规"
+    },
+    {
+      "examNo": 30,
+      "sourceFile": "2024下半年选择题.md",
+      "sourceQuestionNo": 28,
+      "range": "网络安全与标准法规"
+    },
+    {
+      "examNo": 31,
+      "sourceFile": "2024下半年选择题.md",
+      "sourceQuestionNo": 29,
+      "range": "网络安全与标准法规"
+    },
+    {
+      "examNo": 32,
+      "sourceFile": "2024上半年选择题.md",
+      "sourceQuestionNo": 21,
+      "range": "网络安全与标准法规"
+    },
+    {
+      "examNo": 33,
+      "sourceFile": "2024上半年选择题.md",
+      "sourceQuestionNo": 22,
+      "range": "网络安全与标准法规"
+    },
+    {
+      "examNo": 34,
+      "sourceFile": "2024上半年选择题.md",
+      "sourceQuestionNo": 23,
+      "range": "网络安全与标准法规"
+    },
+    {
+      "examNo": 35,
+      "sourceFile": "2024上半年选择题.md",
+      "sourceQuestionNo": 24,
+      "range": "网络安全与标准法规"
+    },
+    {
+      "examNo": 36,
+      "sourceFile": "2024上半年选择题.md",
+      "sourceQuestionNo": 27,
+      "range": "网络安全与标准法规"
+    },
+    {
+      "examNo": 37,
+      "sourceFile": "2024上半年选择题.md",
+      "sourceQuestionNo": 28,
+      "range": "网络安全与标准法规"
+    },
+    {
+      "examNo": 38,
+      "sourceFile": "2024上半年选择题.md",
+      "sourceQuestionNo": 29,
+      "range": "网络安全与标准法规"
+    },
+    {
+      "examNo": 39,
+      "sourceFile": "2023下半年选择题.md",
+      "sourceQuestionNo": 31,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 40,
+      "sourceFile": "2023下半年选择题.md",
+      "sourceQuestionNo": 32,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 41,
+      "sourceFile": "2023下半年选择题.md",
+      "sourceQuestionNo": 33,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 42,
+      "sourceFile": "2023下半年选择题.md",
+      "sourceQuestionNo": 34,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 43,
+      "sourceFile": "2023下半年选择题.md",
+      "sourceQuestionNo": 35,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 44,
+      "sourceFile": "2023下半年选择题.md",
+      "sourceQuestionNo": 36,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 45,
+      "sourceFile": "2023下半年选择题.md",
+      "sourceQuestionNo": 37,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 46,
+      "sourceFile": "2023上半年选择题.md",
+      "sourceQuestionNo": 31,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 47,
+      "sourceFile": "2023上半年选择题.md",
+      "sourceQuestionNo": 33,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 48,
+      "sourceFile": "2023上半年选择题.md",
+      "sourceQuestionNo": 34,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 49,
+      "sourceFile": "2023上半年选择题.md",
+      "sourceQuestionNo": 39,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 50,
+      "sourceFile": "2023上半年选择题.md",
+      "sourceQuestionNo": 40,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 51,
+      "sourceFile": "2022下半年选择题.md",
+      "sourceQuestionNo": 31,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 52,
+      "sourceFile": "2022下半年选择题.md",
+      "sourceQuestionNo": 32,
+      "range": "软件工程与面向对象"
+    },
+    {
+      "examNo": 53,
+      "sourceFile": "2023上半年选择题.md",
+      "sourceQuestionNo": 41,
+      "range": "程序语言与数据结构"
+    },
+    {
+      "examNo": 54,
+      "sourceFile": "2023上半年选择题.md",
+      "sourceQuestionNo": 42,
+      "range": "程序语言与数据结构"
+    },
+    {
+      "examNo": 55,
+      "sourceFile": "2023上半年选择题.md",
+      "sourceQuestionNo": 46,
+      "range": "程序语言与数据结构"
+    },
+    {
+      "examNo": 56,
+      "sourceFile": "2023上半年选择题.md",
+      "sourceQuestionNo": 47,
+      "range": "程序语言与数据结构"
+    },
+    {
+      "examNo": 57,
+      "sourceFile": "2023上半年选择题.md",
+      "sourceQuestionNo": 48,
+      "range": "程序语言与数据结构"
+    },
+    {
+      "examNo": 58,
+      "sourceFile": "2022下半年选择题.md",
+      "sourceQuestionNo": 41,
+      "range": "程序语言与数据结构"
+    },
+    {
+      "examNo": 59,
+      "sourceFile": "2022下半年选择题.md",
+      "sourceQuestionNo": 42,
+      "range": "程序语言与数据结构"
+    },
+    {
+      "examNo": 60,
+      "sourceFile": "2022下半年选择题.md",
+      "sourceQuestionNo": 47,
+      "range": "程序语言与数据结构"
+    },
+    {
+      "examNo": 61,
+      "sourceFile": "2022下半年选择题.md",
+      "sourceQuestionNo": 48,
+      "range": "程序语言与数据结构"
+    },
+    {
+      "examNo": 62,
+      "sourceFile": "2022下半年选择题.md",
+      "sourceQuestionNo": 49,
+      "range": "程序语言与数据结构"
+    },
+    {
+      "examNo": 63,
+      "sourceFile": "2022下半年选择题.md",
+      "sourceQuestionNo": 50,
+      "range": "程序语言与数据结构"
+    },
+    {
+      "examNo": 64,
+      "sourceFile": "2022上半年选择题.md",
+      "sourceQuestionNo": 42,
+      "range": "程序语言与数据结构"
+    },
+    {
+      "examNo": 65,
+      "sourceFile": "2022下半年选择题.md",
+      "sourceQuestionNo": 51,
+      "range": "算法分析与综合应用"
+    },
+    {
+      "examNo": 66,
+      "sourceFile": "2022下半年选择题.md",
+      "sourceQuestionNo": 55,
+      "range": "算法分析与综合应用"
+    },
+    {
+      "examNo": 67,
+      "sourceFile": "2021下半年选择题.md",
+      "sourceQuestionNo": 52,
+      "range": "算法分析与综合应用"
+    },
+    {
+      "examNo": 68,
+      "sourceFile": "2021下半年选择题.md",
+      "sourceQuestionNo": 54,
+      "range": "算法分析与综合应用"
+    },
+    {
+      "examNo": 69,
+      "sourceFile": "2021上半年选择题.md",
+      "sourceQuestionNo": 53,
+      "range": "算法分析与综合应用"
+    },
+    {
+      "examNo": 70,
+      "sourceFile": "2021上半年选择题.md",
+      "sourceQuestionNo": 56,
+      "range": "算法分析与综合应用"
+    },
+    {
+      "examNo": 71,
+      "sourceFile": "2020下半年选择题.md",
+      "sourceQuestionNo": 51,
+      "range": "算法分析与综合应用"
+    },
+    {
+      "examNo": 72,
+      "sourceFile": "2020下半年选择题.md",
+      "sourceQuestionNo": 52,
+      "range": "算法分析与综合应用"
+    },
+    {
+      "examNo": 73,
+      "sourceFile": "2020下半年选择题.md",
+      "sourceQuestionNo": 53,
+      "range": "算法分析与综合应用"
+    },
+    {
+      "examNo": 74,
+      "sourceFile": "2020下半年选择题.md",
+      "sourceQuestionNo": 54,
+      "range": "算法分析与综合应用"
+    },
+    {
+      "examNo": 75,
+      "sourceFile": "2020下半年选择题.md",
+      "sourceQuestionNo": 56,
+      "range": "算法分析与综合应用"
+    }
+  ],
+  "caseSources": [
+    {
+      "examNo": 1,
+      "type": "DFD / 结构化分析",
+      "sourceFile": "2016上半年案例题.md",
+      "sourceQuestionNo": 1
+    },
+    {
+      "examNo": 2,
+      "type": "数据库设计 / ER 图 / 关系模式",
+      "sourceFile": "2016上半年案例题.md",
+      "sourceQuestionNo": 2
+    },
+    {
+      "examNo": 3,
+      "type": "UML / 面向对象分析设计",
+      "sourceFile": "2016上半年案例题.md",
+      "sourceQuestionNo": 3
+    },
+    {
+      "examNo": 4,
+      "type": "算法与程序设计",
+      "sourceFile": "2016上半年案例题.md",
+      "sourceQuestionNo": 4
+    },
+    {
+      "examNo": 5,
+      "type": "Java 设计模式",
+      "sourceFile": "2016上半年案例题.md",
+      "sourceQuestionNo": 6
+    }
+  ]
+}

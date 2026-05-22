@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>软件设计师案例分析模拟答题</title>
+  <style>
+    :root { --paper:#edf9df; --panel:#d8e8cb; --line:#91aa7f; --ink:#101010; --blue:#2f76c4; --orange:#ff7a1a; }
+    * { box-sizing:border-box; }
+    body { margin:0; height:100vh; background:var(--paper); color:var(--ink); font-family:"Microsoft YaHei", "SimSun", sans-serif; font-size:15px; overflow:hidden; }
+    .app { display:grid; grid-template-columns:230px 1fr; height:100vh; min-width:1180px; }
+    aside { display:grid; grid-template-rows:auto 1fr; height:100vh; min-height:0; border-right:2px solid #8da47e; background:#e7f5d7; overflow:hidden; }
+    .side-title { background:#cfe2bd; padding:9px 8px; font-weight:700; border-bottom:1px solid #aabd9a; }
+    .case-nav { min-height:0; overflow-y:auto; overflow-x:hidden; padding-bottom:12px; }
+    .case-group { border-bottom:3px solid #a7b79a; padding:6px; }
+    .case-name { margin-bottom:6px; }
+    .sub-grid { display:flex; flex-wrap:wrap; gap:5px; align-items:center; }
+    .case-btn { width:30px; height:30px; border:1px solid #6ba3d8; background:#f8fcff; cursor:pointer; font-family:Consolas, monospace; }
+    .case-btn.active { border:2px solid var(--orange); background:#fff8ef; }
+    .case-btn.done { background:#d9ebff; }
+    .dot { width:16px; height:16px; border:1px solid #6ba3d8; border-radius:50%; background:#f7fcff; }
+    main { display:grid; grid-template-rows:38px minmax(210px, 48vh) minmax(260px, 1fr); height:100vh; min-height:0; min-width:0; overflow:hidden; }
+    .topbar { display:flex; gap:8px; align-items:center; justify-content:space-between; padding:4px 10px; border-top:3px double #777; border-bottom:1px solid #9caf8d; background:#eef9df; }
+    .tools { display:flex; gap:8px; align-items:center; color:#1473c3; }
+    .tool { border:1px solid #9bb8d6; background:#fff; padding:2px 8px; color:#1473c3; }
+    .timer { font-family:Consolas, monospace; font-size:20px; font-weight:700; color:#b42b20; }
+    .submit, .restart { padding:6px 14px; cursor:pointer; }
+    .submit { border:1px solid #a22d1e; background:#e95b42; color:#fff; }
+    .submit:disabled { background:#b8b8b8; border-color:#888; cursor:not-allowed; }
+    .restart { border:1px solid #6f8e56; background:#fff; color:#244b1e; }
+    .stem { overflow:auto; min-height:0; margin:4px 6px; border:1px solid #9caf8d; background:#eef9df; padding:10px; line-height:1.8; }
+    .question-image { max-width:96%; display:block; margin:8px 0; border:1px solid #b9cba8; background:#fff; }
+    pre { background:#f8fff1; border:1px solid #b5c9a6; padding:10px; overflow:auto; }
+    .work { display:grid; grid-template-columns:minmax(320px, 40%) minmax(420px, 60%); border-top:1px solid #9caf8d; min-height:0; overflow:hidden; }
+    .prompt-pane { display:grid; grid-template-rows:minmax(0, 1fr) auto; min-height:0; overflow:hidden; border-right:1px solid #9caf8d; }
+    .prompt, .answer { min-height:0; overflow-y:auto; overflow-x:hidden; padding:12px; border-right:1px solid #9caf8d; line-height:1.8; }
+    .prompt { border-right:0; }
+    .answer { border-right:0; }
+    textarea { width:100%; min-height:170px; resize:vertical; border:1px solid #a9b8c8; padding:8px; font-family:"Microsoft YaHei", "Consolas", monospace; font-size:15px; background:#fff; }
+    .answer-row { display:grid; grid-template-columns:46px 1fr; align-items:start; gap:8px; margin-bottom:10px; }
+    .label { font-family:Consolas, monospace; }
+    .draw-box { border:1px dashed #6ba3d8; background:#f8fcff; padding:10px; margin-top:10px; }
+    .paste-zone { min-height:90px; border:1px dashed #7e9abd; background:#fff; padding:8px; margin-top:8px; outline:none; }
+    .preview { max-width:100%; display:block; margin-top:8px; border:1px solid #b9cba8; }
+    .source { padding:6px 10px; color:#53644b; border-top:1px solid #9caf8d; font-size:13px; }
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside>
+    <div class="side-title">一、案例分析题（必答题）</div>
+    <div id="caseNav" class="case-nav"></div>
+  </aside>
+  <main>
+    <div class="topbar">
+      <div class="tools"><strong id="caseTitle">试题一</strong><button class="tool" type="button">⊕ 放大</button><button class="tool" type="button">⊖ 缩小</button><button class="tool" type="button">▣ 强调显示</button><button class="tool" type="button">▤ 取消强调</button></div>
+      <div><span class="timer" id="timer">02:00:00</span> <button id="restartBtn" class="restart" type="button">重新开始</button> <button id="submitBtn" class="submit" disabled type="button">交卷</button></div>
+    </div>
+    <section id="stem" class="stem"></section>
+    <section class="work">
+      <div class="prompt-pane"><div id="prompt" class="prompt"></div><div id="source" class="source"></div></div>
+      <div id="answer" class="answer"></div>
+    </section>
+  </main>
+</div>
+<script>
+const CASES = [{"id":"2016上半年案例题-1","examNo":1,"type":"DFD / 结构化分析","sourceFile":"2016上半年案例题.md","sourceQuestionNo":1,"stem":"阅读下列说明和图，回答问题1至问题4，将解答填入答题纸的对应栏内。\r\n【说明】\r\n某会议中心提供举办会议的场地设施和各种设备，供公司与各类组织机构租用。场地包括一个大型报告厅、一个小型报告厅以及诸多会议室。这些报告厅和会议室可提供的设备有投影仪、白板、视频播放/回放设备、计算机等。为了加强管理，该中心欲开发一会议预订系统，系统的主要功能如下。\r\n（1）检查可用性。客户提交预订请求后，检查预订表，判定所申请的场地是否在申请日期内可用；如果不可用，返回不可用信息。\r\n（2）临时预订。会议中心管理员收到客户预定请求的通知之后，提交确认。系统生成新临时预订存入预订表，并对新客户创建一条客户信息记录加以保存。根据客户记录给客户发送临时预订确认信息和支付定金要求。\r\n（3）分配设施与设备。根据临时预订或变更预定的设备和设施需求，分配所需设备（均能满足用户要求）和设施，更新相应的表和预订表。\r\n（4）确认预订。管理员收到客户支付定金的通知后，检查确认，更新预订表，根据客户记录给客户发送预订确认信息。\r\n（5）变更预订。客户还可以在支付余款前提交变更预订请求，对变更的预订请求检查可用性，如果可用，分配设施和设备；如果不可用，返回不可用信息。管理员确认变更后，根据客户记录给客户发送确认信息。\r\n（6）要求付款。管理员从预订表中查询距预订的会议时间两周内的预定，根据客户记录给满足条件的客户发送支付余款要求。\r\n（7）支付余款。管理员收到客户余款支付的通知后，检查确认，更新预订表中的已支付余款信息。\r\n现采用结构化方法对会议预定系统进行分析与设计，获得如图1-1所示的上下文数据流图和图1-2所示的0层数据流图（不完整）。\r\n![q01_st87008_tigan_1](../../题目素材/2016上半年案例题/79d18dae63744e0ea1682f2df261afcd_.png)\r\n**图1-1 上下文数据流图**\r\n![q01_st87008_tigan_2](../../题目素材/2016上半年案例题/ea76dc0437cb4daf9a440ef3210d686c_.png)\r\n**图1-2 0层数据流图**","problems":[{"id":"q1_p1","no":1,"prompt":"【问题1】（2分）\r\n使用说明中的词语，给出图1-1中的实体E1～E2的名称。","answerMode":"text"},{"id":"q1_p2","no":2,"prompt":"【问题2】（4分）\r\n使用说明中的词语，给出图1-2中的数据存储D1～D4的名称。","answerMode":"text"},{"id":"q1_p3","no":3,"prompt":"【问题3】（6分）\r\n根据说明和图中术语，补充图1-2中缺失的数据流及其起点和终点。","answerMode":"text"},{"id":"q1_p4","no":4,"prompt":"【问题4】（3分）   \r\n如果发送给客户的确认信息是通过Email系统向客户信息中的电子邮件地址进行发送的，那么需要对图1-1和1-2进行哪些修改？用150字以内文字加以说明。","answerMode":"text"}]},{"id":"2016上半年案例题-2","examNo":2,"type":"数据库设计 / ER 图 / 关系模式","sourceFile":"2016上半年案例题.md","sourceQuestionNo":2,"stem":"阅读下列说明，回答问题1至问题3，将解答填入答题纸的对应栏内。（共15分）\r\n【说明】\r\n某销售公司当前的销售业务为商城实体店销售。现该公司拟开展网络销售业务，需要开发一个信息化管理系统。请根据公司现有业务及需求完成该系统的数据库设计。\r\n【需求描述】\r\n（1）记录公司所有员工的信息。员工信息包括工号、身份证号、姓名、性别、出生日期和电话，并只登记一部电话。\r\n（2）记录所有商品的信息。商品信息包括商品名称、生产厂家、销售价格和商品介绍。系统内部用商品条码唯一区别每种商品。\r\n（3）记录所有顾客的信息。顾客信息包括顾客姓名、身份证号、登录名、登录密码、和电话号码。一位顾客只能提供一个电话号码。系统自动生成唯一的顾客编号。\r\n（4）顾客登录系统之后，在网上商城购买商品。顾客可将选购的商品置入虚拟的购物车内，购物车可长期存放顾客选购的所有商品。顾客可在购物车内选择商品、修改商品数量后生成网购订单。订单生成后，由顾客选择系统提供的备选第三方支付平台进行电子支付，支付成功后系统需要记录唯一的支付凭证编号，然后由商城根据订单进行线下配送。\r\n（5）所有的配送商品均由仓库统一出库。为方便顾客，允许每位顾客在系统中提供多组收货地址、收货人及联系电话。一份订单所含的多个商品可能由多名分拣员根据商品所在仓库信息从仓库中进行分拣操作，分拣后的商品交由配送员根据配送单上的收货地址进行配送。\r\n（6）新设计的系统要求记录实体店的每笔销售信息，包括营业员、顾客、所售商品及其数量。\r\n【概念模型设计】\r\n根据需求阶段收集的信息，设计的实体联系图（不完整）如图所示。\r\n![q02_st87007_tigan_1](../../题目素材/2016上半年案例题/5c13d01597894ea7ac576f817132c3fd_.png)\r\n【逻辑结构设计】\r\n根据概念模型设计阶段完成的实体联系图，得出如下关系模式（不完整）：\r\n员工（工号，身份证号，姓名，性别，出生日期，电话）\r\n商品（商品条码，商品名称，生产厂家，销售价格，商品介绍， （a） ）\r\n顾客（顾客编号，姓名，身份证号，登录名，登录密码，电话）\r\n收货地点（收货ID，顾客编号，收货地址，收货人，联系电话）\r\n购物车（顾客编号，商品条码，商品数量）\r\n订单（订单ID，顾客编号，商品条码，商品数量， （b） ）\r\n分拣（分拣ID，分拣员工号， （c） ，分拣时间）\r\n配送（配送ID，分拣ID，配送员工号，收货ID，配送时间，签收时间，签收快照）\r\n销售（销售ID，营业员工号，顾客编号，商品条码，商品数量）","problems":[{"id":"q2_p1","no":1,"prompt":"【问题1】（4分）\r\n补充图中的“配送”联系所关联的对象及联系类型。","answerMode":"text-image"},{"id":"q2_p2","no":2,"prompt":"【问题2】（6分）\r\n补充逻辑结构设计中的（a）、（b）和（c）三处空缺。","answerMode":"text"},{"id":"q2_p3","no":3,"prompt":"【问题3】（5分）\r\n对于实体店销售，若要增加送货上门服务，由营业员在系统中下订单，与网购的订单进行后续的统一管理。请根据该需求，对图进行补充，并修改订单关系模式。","answerMode":"text-image"}]},{"id":"2016上半年案例题-3","examNo":3,"type":"UML / 面向对象分析设计","sourceFile":"2016上半年案例题.md","sourceQuestionNo":3,"stem":"阅读下列说明和图，回答问题1至问题3，将解答填入答题纸的对应栏内。\r\n【说明】\r\n某软件公司欲设计实现一个虚拟世界仿真系统。系统中的虚拟世界用于模拟现实世界中的不同环境（由用户设置并创建），用户通过操作仿真系统中的1~2个机器人来探索虚拟世界。机器人维护着两个变量b1和b2，用来保存从虚拟世界中读取的字符。\r\n该系统的主要功能描述如下：\r\n（1）机器人探索虚拟世界（RunRobots）。用户使用编辑器（Editor）编写文件以设置想要模拟的环境，将文件导入系统（LoadFile）从而在仿真系统中建立虚拟世界（SetupWorld）。机器人在虚拟世界中的行为也在文件中进行定义，建立机器人的探索行为程序（SetupProgram）。机器人在虚拟世界中探索时（RunProgram），有2种运行模式：\r\n①自动控制（Run）：事先编排好机器人的动作序列（指令（Instruction）），执行指令，使机器人可以连续动作。若干条指令构成机器人的指令集（InstructionSet）。\r\n②单步控制（Step）：自动控制方式的一种特殊形式，只执行指定指令中的一个动作。\r\n（2）手动控制机器人（ManipulateRobots）。选定1个机器人后（SelectRobot），可以采用手动方式控制它。手动控制有4种方式：\r\n①Move：机器人朝着正前方移动一个交叉点。\r\n②Left：机器人原地沿逆时针方向旋转90度。\r\n③Read：机器人读取其所在位置的字符，并将这个字符的值赋给b1；如果这个位置上没有字符，则不改变b1的当前值。\r\n④Write：将b1中的字符写入机器人当前所在的位置，如果这个位置上已经有字符，该字符的值将会被b1的值替代。如果这时b1没有值，即在执行Write动作之前没有执行过任何Read动作，那么需要提示用户相应的错误信息（ShowErrors）。\r\n手动控制与单步控制的区别在于，单步控制时执行的是指令中的动作，只有一种控制方式，即执行下个动作；而手动控制时有4种动作。\r\n现采用面向对象方法设计并实现该仿真系统，得到如图3-1所示的用例图和图3-2所示的初始类图。图3-2中的类“Interpreter”和“Parser”用于解析描述虚拟世界的文件以及机器人行为文件中的指令集。\r\n    ![q03_st86474_tigan_1](../../题目素材/2016上半年案例题/8b42615d45f54bce8535c3645c003f21_.png)\r\n**图3-1  用例图**\r\n![q03_st86474_tigan_2](../../题目素材/2016上半年案例题/cf3d683ac3f849218332c754fc031fd4_.png)\r\n**图3-2 初始类图**","problems":[{"id":"q3_p1","no":1,"prompt":"【问题1】（6分）\r\n根据说明中的描述，给出图3-1中U1～U6所对应的用例名。","answerMode":"text"},{"id":"q3_p2","no":2,"prompt":"【问题2】（4分）\r\n图3-1中用例U1～U6分别与哪个（哪些）用例之间有关系，是何种关系？","answerMode":"text"},{"id":"q3_p3","no":3,"prompt":"【问题3】（5分）    \r\n根据说明中的描述，给出图3-2中C1～C5所对应的类名。","answerMode":"text"}]},{"id":"2016上半年案例题-4","examNo":4,"type":"算法与程序设计","sourceFile":"2016上半年案例题.md","sourceQuestionNo":4,"stem":"阅读下列说明和C代码，回答问题1至问题3，将解答写在答题纸的对应栏内。\r\n【说明】\r\n在一块电路板的上下两端分别有n个接线柱。根据电路设计，用(i,π(i))表示将上端接线柱i与下端接线柱π(i)相连，称其为该电路板上的第i条连线。如图4-1所示的π(i)排列为{8,7,4,2,5,1,9,3,10,6}。对于任何1≤i\u003cj≤n，第i条连线和第j条连线相交的充要条件是π(i)>π(j)。\r\n    ![q04_st86475_tigan_1](../../题目素材/2016上半年案例题/56107e068a45470f8438bf9ac6e00eca_.png)\r\n**图4-1 电路布线示意**\r\n    在制作电路板时，要求将这n条连线分布到若干绝缘层上，在同一层上的连线不相交。现在要确定将哪些连线安排在一层上，使得该层上有尽可能多的连线，即确定连线集Nets={(i,π(i))，1≤i≤n}的最大不相交子集。\r\n【分析问题】\r\n    记N(i,j)={t|(t,π(t))∈Nets,t≤i,π(t)≤j}。N(i,j)的最大不相交子集为MNS(i,j)，size(i,j)=|MNS(i,j)|。\r\n    经分析，该问题具有最优子结构性质。对规模为n的电路布线问题，可以构造如下递归式：\r\n   ![q04_st86475_tigan_2](../../题目素材/2016上半年案例题/a247191309784c09a86693838ad59c21_.png)\r\n【C代码】\r\n下面是算法的C语言实现。\r\n（1）变量说明\r\nsize[i][j]：上下端分别有i个和j个接线柱的电路板的第一层最大不相交连接数\r\npi[i]： π(i)，下标从1开始\r\n（2）C程序\r\n#include \"stdlib.h\"\r\n#include \u003cstdio.h>\r\n#define  N  10    /*问题规模*/\r\nint m=0；    /*记录最大连接集合中的接线柱*/\r\nvoid maxNum(int pi[],int size[N+1][N+1],int n)  {/*求最大不相交连接数*/\r\n    int i, j;\r\n    for(j=0; j \u003c pi[1]; j++)   size[1][j] = 0;   /*当j\u003cπ(1)时  */\r\n    for(j=pi[1];j\u003c=n;j++)    （1）   ; /*当j>=π(1)时  */\r\n    for(i=2; i \u003c n; i++)   {\r\n        for(j=0; j \u003c pi[i]; j++)    （2）   ; /*当j\u003c\r\nπ  [i]时  */\r\n        for(j=pi[i];j\u003c=n；j++)  {/*当j>=\r\nπ  [i]时,考虑两种情况*/\r\n           size[i][j]=size[i-1][j]>=size[i-1][pi[i]-1]+1 ?size[i-1][j]:size[i-1][pi[i]-1]+1;\r\n        }\r\n    }\r\n    /*最大连接数  */\r\n    size[n][n]=size[n-1][n]>=size[n-1][pi[n]-1]+1 ? size[n-1][n]:size[n-1][pi[n]-1]+1;\r\n}\r\n/*构造最大不相交连接集合，net[i]表示最大不相交子集中第i条连线的上端接线柱的序号  */\r\nvoid constructSet（int pi[],int size[N+1][N+1],int n,int net[n]）{\r\n    int i,j=n;\r\n    m=0；\r\n    for(i=n ; i>1 ; i--)    {    /*从后往前*/\r\n        if(size[i][j]!=size[i-1][j]){  /*(i,pi[i])是最大不相交子集的一条连线*/  \r\n              （3）  ;    /*将i记录到数组net中，连接线数自增1*/\r\n            j= pi[i]-1;    /*更新扩展连线柱区间*/\r\n        }\r\n    }\r\n    if(j>=pi[1])  net[m++]=1;  /*当i=1时*/\r\n}","problems":[{"id":"q4_p1","no":1,"prompt":"【问题1】（6分）\r\n根据以上说明和C代码，填充C代码中的空（1）～（3）。","answerMode":"text"},{"id":"q4_p2","no":2,"prompt":"【问题2】（6分）    \r\n根据题干说明和以上C代码，算法采用了  （4）  算法设计策略。      \r\n函数maxNum和constructSet的时间复杂度分别为  （5）   和   （6）  （用O表示）。","answerMode":"text"},{"id":"q4_p3","no":3,"prompt":"【问题3】（3分）    \r\n若连接排列为{8,7,4,2,5,1,9,3,10,6}，即如图4-1所示，则最大不相交连接数为   （7）   ，包含的连线为  （8）   （用(i,π(i))的形式给出）。","answerMode":"text"}]},{"id":"2016上半年案例题-6","examNo":5,"type":"Java 设计模式","sourceFile":"2016上半年案例题.md","sourceQuestionNo":6,"stem":"阅读下列说明和Java代码，将应填入 （n） 处的字句写在答题纸的对应栏内。\r\n【说明】\r\n某软件系统中，已设计并实现了用于显示地址信息的类Address（如图6-1所示），现要求提供基于Dutch语言的地址信息显示接口。为了实现该要求并考虑到以后可能还会出现新的语言的接口，决定采用适配器（Adapter）模式实现该要求，得到如图6-1所示的类图。\r\n ![q06_st86477_tigan_1](../../题目素材/2016上半年案例题/ed5920d1d59d4f1cb3da25d1981a9d81_.png)\r\n图6-1 适配器模式类图","problems":[{"id":"q6_p1","no":1,"prompt":"【Java代码】\r\nimport java.util.*;\r\nClass Address{\r\n    public void street()   {    //实现代码省略   }\r\n    public void zip()      {    //实现代码省略   }\r\n    public void city()     {    //实现代码省略   }\r\n//其他成员省略\r\n};\r\nclass DutchAddress{\r\n    public void straat()    {    //实现代码省略   }\r\n    public void postcode()  {    //实现代码省略   }\r\n    public void plaats()    {    //实现代码省略   }\r\n//其他成员省略\r\n};\r\nclass DutchAddressAdapter extends DutchAddress {\r\n    private   （1）   ;\r\n    public DutchAddressAdapter (Address addr){\r\n        address= addr;\r\n    }\r\n    public void straat() {\r\n          （2）   ; \r\n    }\r\n    public void postcode() {\r\n          （3）   ; \r\n    }\r\n    public void plaats(){\r\n         （4）   ; \r\n    }\r\n//其他成员省略\r\n};\r\nclass Test {\r\n    public static void main(String[] args) {\r\n        Address  addr= new Address();\r\n          （5）   ; \r\n        System.out.println(\"\\n The DutchAddress\\n\");\r\n        testDutch(addrAdapter);\r\n    }\r\n    Static void  testDutch(DutchAddress addr){  \r\n          addr.straat();\r\n          addr.postcode();\r\n          addr.plaats();\r\n    }\r\n}","answerMode":"text"}]}];
+
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+function inlineMarkdown(value) {
+  return escapeHtml(value)
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img class="question-image" alt="$1" src="$2">')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n/g, '<br>');
+}
+function renderMarkdown(md) {
+  const blocks = [];
+  let text = String(md ?? '').replace(/\r\n/g, '\n');
+  text = text.replace(/\`\`\`([\s\S]*?)\`\`\`/g, (_, code) => {
+    const token = '%%CODE' + blocks.length + '%%';
+    blocks.push('<pre><code>' + escapeHtml(code.trim()) + '</code></pre>');
+    return token;
+  });
+  let html = text.split(/\n{2,}/).map(part => {
+    if (/^%%CODE\d+%%$/.test(part.trim())) return part.trim();
+    if (/^#{1,4}\s+/m.test(part.trim())) {
+      return '<p>' + inlineMarkdown(part.replace(/^#{1,4}\s+/gm, '')) + '</p>';
+    }
+    return '<p>' + inlineMarkdown(part.trim()) + '</p>';
+  }).join('');
+  blocks.forEach((block, index) => { html = html.replace('%%CODE' + index + '%%', block); });
+  return html;
+}
+function stamp() {
+  const d = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  return d.getFullYear() + pad(d.getMonth()+1) + pad(d.getDate()) + '_' + pad(d.getHours()) + pad(d.getMinutes()) + pad(d.getSeconds());
+}
+function downloadJson(filename, payload) {
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+function resetMockExam(targetUrl) {
+  const ok = confirm('重新开始会清空本轮计时、已选答案和交卷记录，确定继续吗？');
+  if (!ok) return;
+  [
+    'sdes_mock_exam_session_start_v1',
+    'sdes_mock_choice_start_v1',
+    'sdes_mock_case_start_v1',
+    'sdes_mock_choice_answers_v1',
+    'sdes_mock_case_answers_v1',
+    'sdes_mock_choice_submission_v1',
+    'sdes_mock_case_submission_v1'
+  ].forEach(key => localStorage.removeItem(key));
+  window.location.href = targetUrl || window.location.pathname;
+}
+function ensureSessionStart() {
+  const key = 'sdes_mock_exam_session_start_v1';
+  let start = Number(localStorage.getItem(key));
+  if (!start) {
+    start = Date.now();
+    localStorage.setItem(key, String(start));
+  }
+  return start;
+}
+function formatTime(ms) {
+  const total = Math.max(0, Math.ceil(ms / 1000));
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+  return String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+}
+
+const ANSWER_KEY = 'sdes_mock_case_answers_v1';
+const SUBMIT_KEY = 'sdes_mock_case_submission_v1';
+ensureSessionStart();
+const globalStart = Number(localStorage.getItem('sdes_mock_exam_session_start_v1'));
+const caseStartKey = 'sdes_mock_case_start_v1';
+if (!localStorage.getItem(caseStartKey)) localStorage.setItem(caseStartKey, String(Date.now()));
+const caseStart = Number(localStorage.getItem(caseStartKey));
+const answers = JSON.parse(localStorage.getItem(ANSWER_KEY) || '{}');
+let currentCase = 0;
+let currentProblem = 0;
+let submitted = false;
+function caseLabel(index) { return ['一','二','三','四','五'][index] || String(index + 1); }
+function saveAnswers() { localStorage.setItem(ANSWER_KEY, JSON.stringify(answers)); }
+function fieldKey(c, p) { return 'q' + c.examNo + '_p' + p.no; }
+function isDone(c, p) {
+  const value = answers[fieldKey(c, p)];
+  return Boolean(value && ((value.text && value.text.trim()) || value.image));
+}
+function renderNav() {
+  document.getElementById('caseNav').innerHTML = CASES.map((c, ci) => {
+    const buttons = c.problems.map((p, pi) => '<button class="case-btn ' + (ci===currentCase && pi===currentProblem?'active ':'') + (isDone(c,p)?'done':'') + '" data-c="' + ci + '" data-p="' + pi + '">' + String(p.no).padStart(2,'0') + '</button><span class="dot"></span>').join('');
+    return '<div class="case-group"><div class="case-name">试题' + caseLabel(ci) + '</div><div class="sub-grid">' + buttons + '</div></div>';
+  }).join('');
+  document.querySelectorAll('.case-btn').forEach(btn => btn.addEventListener('click', () => {
+    currentCase = Number(btn.dataset.c);
+    currentProblem = Number(btn.dataset.p);
+    render();
+  }));
+}
+function render() {
+  const c = CASES[currentCase];
+  const p = c.problems[currentProblem];
+  const key = fieldKey(c, p);
+  const saved = answers[key] || {};
+  renderNav();
+  document.getElementById('caseTitle').textContent = '试题' + caseLabel(currentCase) + '（' + c.type + '，15分）';
+  document.getElementById('stem').innerHTML = renderMarkdown(c.stem);
+  document.getElementById('prompt').innerHTML = renderMarkdown(p.prompt);
+  document.getElementById('source').textContent = '题源：' + c.sourceFile + ' 第' + c.sourceQuestionNo + '题';
+  let drawHtml = '';
+  if (p.answerMode === 'text-image') {
+    drawHtml = '<div class="draw-box"><div>本小问需要补充图形。可使用同目录 drawio 文件：<strong>数据库设计补图作答.drawio</strong>；完成后导出图片，再上传或粘贴到下方。</div><input id="imageInput" type="file" accept="image/*"><div id="pasteZone" class="paste-zone" tabindex="0">也可以点击这里后直接 Ctrl+V 粘贴导出的图片。</div><img id="preview" class="preview" style="' + (saved.image ? '' : 'display:none') + '" src="' + (saved.image || '') + '"></div>';
+  }
+  document.getElementById('answer').innerHTML = '<div class="answer-row"><div class="label">答：</div><div><textarea id="answerText" placeholder="在此填写本小问答案">' + escapeHtml(saved.text || '') + '</textarea>' + drawHtml + '</div></div>';
+  document.getElementById('answerText').addEventListener('input', event => {
+    answers[key] = { ...(answers[key] || {}), text: event.target.value };
+    saveAnswers();
+    renderNav();
+  });
+  const imageInput = document.getElementById('imageInput');
+  if (imageInput) {
+    imageInput.addEventListener('change', event => {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        answers[key] = { ...(answers[key] || {}), image: reader.result, imageName: file.name };
+        saveAnswers();
+        render();
+      };
+      reader.readAsDataURL(file);
+    });
+    document.getElementById('pasteZone').addEventListener('paste', event => {
+      const item = [...event.clipboardData.items].find(it => it.type.startsWith('image/'));
+      if (!item) return;
+      const file = item.getAsFile();
+      const reader = new FileReader();
+      reader.onload = () => {
+        answers[key] = { ...(answers[key] || {}), image: reader.result, imageName: 'clipboard-image.png' };
+        saveAnswers();
+        render();
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+}
+function submit(forced=false) {
+  if (submitted) return;
+  submitted = true;
+  const payload = {
+    paper: '软件设计师案例分析HTML模拟第1轮',
+    submittedAt: new Date().toISOString(),
+    forced,
+    sources: CASES.map(c => ({ examNo:c.examNo, type:c.type, sourceFile:c.sourceFile, sourceQuestionNo:c.sourceQuestionNo })),
+    answers
+  };
+  localStorage.setItem(SUBMIT_KEY, JSON.stringify(payload));
+  downloadJson('案例题答题答案_' + stamp() + '.json', payload);
+  document.getElementById('submitBtn').textContent = '已交卷';
+}
+document.getElementById('submitBtn').addEventListener('click', () => submit(false));
+document.getElementById('restartBtn').addEventListener('click', () => resetMockExam('选择题答题.html'));
+function tick() {
+  const caseRemain = 2 * 60 * 60 * 1000 - (Date.now() - caseStart);
+  const globalRemain = 4 * 60 * 60 * 1000 - (Date.now() - globalStart);
+  const remain = Math.min(caseRemain, globalRemain);
+  document.getElementById('timer').textContent = formatTime(remain);
+  const canSubmit = caseRemain <= 30 * 60 * 1000 || globalRemain <= 30 * 60 * 1000;
+  document.getElementById('submitBtn').disabled = !canSubmit;
+  document.getElementById('submitBtn').textContent = canSubmit ? '交卷' : '剩余30分钟后可交卷';
+  if (remain <= 0) submit(true);
+}
+render();
+tick();
+setInterval(tick, 1000);
+</script>
+</body>
+</html>
